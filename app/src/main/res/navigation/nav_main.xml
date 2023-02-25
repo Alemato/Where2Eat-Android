@@ -15,4 +15,8 @@
         android:id="@+id/restaurantDetailsFragment"
         android:name="com.example.where2eat.RestaurantDetailsFragment"
         android:label="RestaurantDetailsFragment" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.where2eat.LoginFragment"
+        android:label="LoginFragment" />
 </navigation>

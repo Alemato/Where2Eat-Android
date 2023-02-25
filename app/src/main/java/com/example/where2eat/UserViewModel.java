@@ -15,6 +15,15 @@ import java.util.Objects;
 public class UserViewModel extends AndroidViewModel {
     private MutableLiveData<User> user = new MutableLiveData<>(null);
 
+    {
+        new Thread(() -> {
+            User user1 = DBHelper.getInstance(getApplication().getApplicationContext()).getUserDao().getUser();
+            if (user1 != null && !Objects.equals(user1, new User())) {
+                user.postValue(user1);
+            }
+        }).start();
+    }
+
     public UserViewModel(@NonNull Application application) {
         super(application);
     }

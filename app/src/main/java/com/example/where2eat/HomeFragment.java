@@ -8,21 +8,30 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.example.where2eat.databinding.FragmentHomeBinding;
 import com.example.where2eat.domain.modal.Restaurant;
+import com.example.where2eat.domain.modal.User;
 import com.example.where2eat.roomdatabase.DBHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class HomeFragment extends Fragment {
 
     FragmentHomeBinding binding = null;
 
+    private UserViewModel userViewModel;
+
     List<Restaurant> restaurantList = new ArrayList<>();
     private AdapterRestaurantCard adapterRestaurantCard;
+
 
     @Nullable
     @Override
@@ -31,6 +40,7 @@ public class HomeFragment extends Fragment {
         adapterRestaurantCard = new AdapterRestaurantCard(restaurantList);
         binding.recyclerViewHome.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.recyclerViewHome.setAdapter(adapterRestaurantCard);
+        userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
         return binding.getRoot();
     }
 
@@ -63,5 +73,18 @@ public class HomeFragment extends Fragment {
         }).start();
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        final NavController navController = Navigation.findNavController(view);
+        new Thread(() -> {
+            User user = DBHelper.getInstance(requireContext()).getUserDao().getUser();
+            if (user == null || Objects.equals(user, new User())) {
+                binding.textTitleHome.post(() -> {
+                    navController.navigate(R.id.loginFragment);
+                });
+            }
+        }).start();
+    }
 
 }
