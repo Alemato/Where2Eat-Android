@@ -52,7 +52,7 @@ public class LoginFragment extends Fragment {
                             }
                             binding.textUserNameLogin.post(() -> {
                                 final NavController navController = Navigation.findNavController(requireView());
-                                navController.navigate(R.id.twoFragment);
+                                navController.navigate(R.id.homeFragment);
                             });
                         }).start();
                         return;
