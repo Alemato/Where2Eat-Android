@@ -17,10 +17,11 @@ public interface UserDao {
     @Delete
     void delete(User user);
 
-    @Query("SELECT * FROM user LIMIT 1")
+    @Query("SELECT * FROM users LIMIT 1")
     User getUser();
+    @Query("SELECT token FROM users LIMIT 1")
+    String getToken();
 
-    @Query("SELECT token FROM user LIMIT 1")
-    String getTocken();
-
+    @Query("DELETE FROM users")
+    void deleteAll();
 }

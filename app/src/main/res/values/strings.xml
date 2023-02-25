@@ -2,4 +2,8 @@
     <string name="app_name">where2eat</string>
     <string name="avarage_dish_cost">Avarage dish cost:  €</string>
     <string name="ristoranti_pi_richiesti_a">Popular restaurants in</string>
+    <string name="login">Login</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="effettua_la_login">Please log in</string>
 </resources>

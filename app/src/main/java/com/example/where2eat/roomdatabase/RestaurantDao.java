@@ -29,6 +29,9 @@ public abstract class RestaurantDao {
     @Query("SELECT * FROM restaurants WHERE id = :id")
     public abstract Restaurant findById(long id);
 
+    @Query("DELETE FROM restaurants")
+    public abstract void deleteAll();
+
 /*
     @Query("SELECT id FROM restaurants ORDER BY id DESC LIMIT 1")
     public abstract long findLastId();

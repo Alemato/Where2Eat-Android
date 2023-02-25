@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 
-@Entity
+@Entity(tableName = "users")
 public class User implements Serializable {
     @PrimaryKey
     private Long id;
@@ -41,8 +41,6 @@ public class User implements Serializable {
     }
 
     public static User parseJson(JSONObject json){
-        System.out.println("#####");
-        System.out.println(json);
         User user = new User();
         user.setId(json.optLong("id"));
         user.setNome(json.optString("nome"));
