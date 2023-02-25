@@ -5,6 +5,8 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(tableName = "restaurants")
 public class Restaurant implements Serializable {
@@ -31,11 +33,20 @@ public class Restaurant implements Serializable {
     private String descrizione;
     @ColumnInfo(name = "descrizione_breve")
     private String descrizioneBreve;
+    @ColumnInfo(name = "voto_medio")
+    private String votoMedio;
+    @ColumnInfo
+    private String servizi;
+    @ColumnInfo(name = "metodi_di_pagamento")
+    private String metodiDiPagamento;
+    @ColumnInfo(name = "tipi_di_cucina")
+    private String tipiDiCucina;
+
 
     public Restaurant() {
     }
 
-    public Restaurant(Long id, String ragioneSociale, String indirizzo, String localita, Integer prezzoMedioDichiarato, String emailAziendale, String telefonoAziendale, Boolean statoRistorante, Integer capienzaMassima, String descrizione, String descrizioneBreve) {
+    public Restaurant(Long id, String ragioneSociale, String indirizzo, String localita, Integer prezzoMedioDichiarato, String emailAziendale, String telefonoAziendale, Boolean statoRistorante, Integer capienzaMassima, String descrizione, String descrizioneBreve, String votoMedio, String servizi, String metodiDiPagamento, String tipiDiCucina) {
         this.id = id;
         this.ragioneSociale = ragioneSociale;
         this.indirizzo = indirizzo;
@@ -135,5 +146,58 @@ public class Restaurant implements Serializable {
 
     public void setDescrizioneBreve(String descrizioneBreve) {
         this.descrizioneBreve = descrizioneBreve;
+    }
+
+    public String getVotoMedio() {
+        return votoMedio;
+    }
+
+    public void setVotoMedio(String votoMedio) {
+        this.votoMedio = votoMedio;
+    }
+
+    public String getServizi() {
+        return servizi;
+    }
+
+    public void setServizi(String servizi) {
+        this.servizi = servizi;
+    }
+
+    public String getMetodiDiPagamento() {
+        return metodiDiPagamento;
+    }
+
+    public void setMetodiDiPagamento(String metodiDiPagamento) {
+        this.metodiDiPagamento = metodiDiPagamento;
+    }
+
+    public String getTipiDiCucina() {
+        return tipiDiCucina;
+    }
+
+    public void setTipiDiCucina(String tipiDiCucina) {
+        this.tipiDiCucina = tipiDiCucina;
+    }
+
+    @Override
+    public String toString() {
+        return "Restaurant{" +
+                "id=" + id +
+                ", ragioneSociale='" + ragioneSociale + '\'' +
+                ", indirizzo='" + indirizzo + '\'' +
+                ", localita='" + localita + '\'' +
+                ", prezzoMedioDichiarato=" + prezzoMedioDichiarato +
+                ", emailAziendale='" + emailAziendale + '\'' +
+                ", telefonoAziendale='" + telefonoAziendale + '\'' +
+                ", statoRistorante=" + statoRistorante +
+                ", capienzaMassima=" + capienzaMassima +
+                ", descrizione='" + descrizione + '\'' +
+                ", descrizioneBreve='" + descrizioneBreve + '\'' +
+                ", votoMedio='" + votoMedio + '\'' +
+                ", servizi='" + servizi + '\'' +
+                ", metodiDiPagamento='" + metodiDiPagamento + '\'' +
+                ", tipiDiCucina='" + tipiDiCucina + '\'' +
+                '}';
     }
 }

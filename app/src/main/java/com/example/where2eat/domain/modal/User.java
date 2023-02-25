@@ -1,20 +1,31 @@
 package com.example.where2eat.domain.modal;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import org.json.JSONObject;
 
 import java.io.Serializable;
 
+@Entity
 public class User implements Serializable {
+    @PrimaryKey
     private Long id;
 
+    @ColumnInfo
     private String nome;
 
+    @ColumnInfo
     private String cognome;
 
+    @ColumnInfo
     private String email;
 
+    @ColumnInfo
     private String telefono;
 
+    @ColumnInfo
     private String token;
 
     public User() {
