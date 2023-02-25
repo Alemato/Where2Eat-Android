@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">where2eat</string>
+    <string name="avarage_dish_cost">Avarage dish cost:  €</string>
+    <string name="ristoranti_pi_richiesti_a">Popular restaurants in</string>
 </resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">where2eat</string>
+    <string name="avarage_dish_cost">Costo medio dei piatti:  €</string>
+    <string name="ristoranti_pi_richiesti_a">Ristoranti più richiesti a</string>
+</resources>
