@@ -13,7 +13,7 @@ import com.example.where2eat.databinding.FragmentRestaurantDetailsBinding;
 
 public class RestaurantDetailsFragment extends Fragment {
 
-    FragmentRestaurantDetailsBinding binding = null;
+    private FragmentRestaurantDetailsBinding binding;
 
     @Nullable
     @Override
