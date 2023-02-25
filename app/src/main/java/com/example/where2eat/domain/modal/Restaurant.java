@@ -1,19 +1,35 @@
 package com.example.where2eat.domain.modal;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.io.Serializable;
 
+@Entity(tableName = "restaurants")
 public class Restaurant implements Serializable {
 
+    @PrimaryKey
     private Long id;
+    @ColumnInfo(name = "ragione_sociale")
     private String ragioneSociale;
+    @ColumnInfo
     private String indirizzo;
+    @ColumnInfo
     private String localita;
+    @ColumnInfo(name = "prezzo_medio_dichiarato")
     private Integer prezzoMedioDichiarato;
+    @ColumnInfo(name = "email_aziendale")
     private String emailAziendale;
+    @ColumnInfo(name = "telefono_aziendale")
     private String telefonoAziendale;
+    @ColumnInfo(name = "stato_ristorante")
     private Boolean statoRistorante;
+    @ColumnInfo(name = "capienza_massima")
     private Integer capienzaMassima;
+    @ColumnInfo
     private String descrizione;
+    @ColumnInfo(name = "descrizione_breve")
     private String descrizioneBreve;
 
     public Restaurant() {

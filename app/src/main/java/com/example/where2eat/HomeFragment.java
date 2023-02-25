@@ -13,7 +13,7 @@ import com.example.where2eat.databinding.FragmentHomeBinding;
 
 public class HomeFragment extends Fragment {
 
-    private FragmentHomeBinding binding;
+    FragmentHomeBinding binding = null;
 
     @Nullable
     @Override
