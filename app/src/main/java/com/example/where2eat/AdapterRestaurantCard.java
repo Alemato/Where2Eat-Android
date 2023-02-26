@@ -1,15 +1,22 @@
 package com.example.where2eat;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.where2eat.databinding.AdapterRestaurantCardBinding;
 import com.example.where2eat.domain.modal.Restaurant;
+import com.example.where2eat.tools.VolleyRequests;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +28,10 @@ public class AdapterRestaurantCard extends RecyclerView.Adapter<AdapterRestauran
     private Context context;
     private List<Restaurant> restaurantList;
 
+    private RestaurantViewModal restaurantViewModal;
+
+    NavController navController;
+
     public AdapterRestaurantCard(Context context, List<Restaurant> restaurantList) {
         this.context = context;
         this.restaurantList = restaurantList;
@@ -30,7 +41,8 @@ public class AdapterRestaurantCard extends RecyclerView.Adapter<AdapterRestauran
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         binding = AdapterRestaurantCardBinding.inflate(LayoutInflater.from(context), parent, false);
-
+        restaurantViewModal = new ViewModelProvider(((MainActivity) context)).get(RestaurantViewModal.class);
+        navController = Navigation.findNavController(parent);
         return new ViewHolder(binding.getRoot());
     }
 
@@ -50,11 +62,19 @@ public class AdapterRestaurantCard extends RecyclerView.Adapter<AdapterRestauran
         this.restaurantList = list;
     }
 
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
 
         public ViewHolder(View itemView) {
             super(itemView);
+
+            itemView.setOnClickListener(v -> {
+                Restaurant restaurant = restaurantList.get(getAdapterPosition());
+                restaurantViewModal.setRestaurant(restaurant);
+
+                navController.navigate(R.id.restaurantDetailsFragment);
+            });
 
         }
 
@@ -62,6 +82,7 @@ public class AdapterRestaurantCard extends RecyclerView.Adapter<AdapterRestauran
 
             Restaurant restaurant = restaurantList.get(position);
             binding.setRestaurant(restaurant);
+            binding.imageView.setImageUrl(restaurant.getImmagine(), VolleyRequests.getInstance(binding.imageView.getContext()).getImageLoader());
         }
     }
 }

@@ -1,8 +1,12 @@
 package com.example.where2eat.domain.modal;
 
+import static android.provider.Settings.Global.getString;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+
+import com.example.where2eat.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -96,7 +100,8 @@ public class Restaurant implements Serializable {
         if (immagini != null && immagini.length() > 0) {
             //restaurant.setImmagine(restaurant.getId() + "/immagine-copertina");
             try {
-                restaurant.setImmagine(immagini.getJSONObject(0).optString("path"));
+                String url = "http://192.168.178.37:8080/api/uploads/" + immagini.getJSONObject(0).optString("path");
+                restaurant.setImmagine(url);
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
@@ -323,6 +328,8 @@ public class Restaurant implements Serializable {
                 ", ragioneSociale='" + ragioneSociale + '\'' +
                 ", indirizzo='" + indirizzo + '\'' +
                 ", localita='" + localita + '\'' +
+                ", longitudine='" + longitudine + '\'' +
+                ", latitudine='" + latitudine + '\'' +
                 ", prezzoMedioDichiarato=" + prezzoMedioDichiarato +
                 ", emailAziendale='" + emailAziendale + '\'' +
                 ", telefonoAziendale='" + telefonoAziendale + '\'' +
@@ -331,9 +338,10 @@ public class Restaurant implements Serializable {
                 ", descrizione='" + descrizione + '\'' +
                 ", descrizioneBreve='" + descrizioneBreve + '\'' +
                 ", votoMedio='" + votoMedio + '\'' +
+                ", immagine='" + immagine + '\'' +
                 ", servizi='" + servizi + '\'' +
                 ", metodiDiPagamento='" + metodiDiPagamento + '\'' +
-                ", tipiDiCucina='" + tipologiaCucina + '\'' +
+                ", tipologiaCucina='" + tipologiaCucina + '\'' +
                 '}';
     }
 }

@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">where2eat</string>
     <string name="avarage_dish_cost">Costo medio dei piatti:  €</string>
-    <string name="ristoranti_pi_richiesti_a">Ristoranti più richiesti a</string>
+    <string name="ristoranti_pi_richiesti_a">Ristoranti</string>
     <string name="login">Login</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
