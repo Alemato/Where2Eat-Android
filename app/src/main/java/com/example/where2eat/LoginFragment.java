@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -65,6 +67,7 @@ public class LoginFragment extends Fragment {
         }
     };
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -95,6 +98,18 @@ public class LoginFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        AppCompatActivity act = (AppCompatActivity) getActivity();
+        if (act != null) {
+            ActionBar a = act.getSupportActionBar();
+            if (a != null) {
+                a.hide();
+            }
+        }
+    }
+
     private void blockLogin() {
         isProgressVisible = true;
         binding.progressBarLogin.setVisibility(View.VISIBLE);
@@ -123,6 +138,7 @@ public class LoginFragment extends Fragment {
 
     @Override
     public void onResume() {
+        System.out.println("Resume Login");
         super.onResume();
         IntentFilter filter = new IntentFilter();
         filter.addAction(AuthService.LOGIN_ERROR);
@@ -131,10 +147,16 @@ public class LoginFragment extends Fragment {
                 .registerReceiver(receiver, filter);
     }
 
-
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
+        AppCompatActivity act = (AppCompatActivity) getActivity();
+        if (act != null) {
+            ActionBar a = act.getSupportActionBar();
+            if (a != null) {
+                a.show();
+            }
+        }
         LocalBroadcastManager.getInstance(requireContext())
                 .unregisterReceiver(receiver);
     }

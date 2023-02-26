@@ -6,4 +6,8 @@
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="effettua_la_login">Please log in</string>
+    <string name="mappa">Map</string>
+    <string name="prenotazioni_effettuate">Bookings</string>
+    <string name="home">Home</string>
+    <string name="esci">Esci</string>
 </resources>

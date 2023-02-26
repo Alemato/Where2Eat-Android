@@ -7,4 +7,8 @@
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="effettua_la_login">Effettua la login</string>
+    <string name="mappa">Mappa</string>
+    <string name="prenotazioni_effettuate">Prenotazioni Effettuate</string>
+    <string name="home">Home</string>
+    <string name="esci">Esci</string>
 </resources>
