@@ -57,13 +57,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/imageView"
-                    android:layout_alignParentEnd="true"
                     android:layout_marginStart="190dp"
                     android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
                     android:layout_toEndOf="@+id/textRagioneSocialeCardRestaurant"
-                    android:textSize="20sp"
                     android:text="@{restaurant.votoMedio}"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="5.0" />
@@ -109,7 +108,7 @@
                     android:layout_below="@+id/textIndirizzoCardRestaurant"
                     android:layout_marginStart="2dp"
                     android:layout_marginTop="16dp"
-                    android:text="@{restaurant.prezzoMedioDichiarato}"
+                    android:text="@{String.valueOf(restaurant.prezzoMedioDichiarato)}"
                     android:layout_toEndOf="@+id/textCostoMedioCardRestaurant"
                     tools:text="15.00" />
 

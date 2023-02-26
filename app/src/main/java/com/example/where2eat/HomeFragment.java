@@ -28,8 +28,10 @@ public class HomeFragment extends Fragment {
     FragmentHomeBinding binding = null;
 
     private UserViewModel userViewModel;
+    private RestaurantViewModal restaurantViewModal;
 
-    List<Restaurant> restaurantList = new ArrayList<>();
+
+    private List<Restaurant> restaurantList = new ArrayList<>();
     private AdapterRestaurantCard adapterRestaurantCard;
 
 
@@ -37,17 +39,22 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
-        adapterRestaurantCard = new AdapterRestaurantCard(restaurantList);
         binding.recyclerViewHome.setLayoutManager(new LinearLayoutManager(requireContext()));
+        adapterRestaurantCard = new AdapterRestaurantCard(requireContext(), restaurantList);
         binding.recyclerViewHome.setAdapter(adapterRestaurantCard);
+
+        restaurantViewModal = new ViewModelProvider(requireActivity()).get(RestaurantViewModal.class);
         userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+        restaurantViewModal.getRestaurantList().observe(getViewLifecycleOwner(), restaurants -> {
+            restaurantList = restaurants;
+            adapterRestaurantCard.updateRestaurants(restaurantList);
+        });
         return binding.getRoot();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
         new Thread(new Runnable() {
             @Override
             public void run() {

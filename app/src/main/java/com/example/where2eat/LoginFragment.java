@@ -80,6 +80,7 @@ public class LoginFragment extends Fragment {
                         unlockLogin(pwd, usr);
                         Toast.makeText(requireContext(), "Errore nella ripresa dei ristoranti", Toast.LENGTH_SHORT).show();
                         requireActivity().finish();
+                        //TODO Reset all invece di finish()
                         return;
                 }
             }

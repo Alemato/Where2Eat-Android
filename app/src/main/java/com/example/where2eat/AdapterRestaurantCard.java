@@ -1,5 +1,6 @@
 package com.example.where2eat;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +18,19 @@ public class AdapterRestaurantCard extends RecyclerView.Adapter<AdapterRestauran
 
     AdapterRestaurantCardBinding binding = null;
 
-    List<Restaurant> restaurantList;
+    private Context context;
+    private List<Restaurant> restaurantList;
 
-    public AdapterRestaurantCard(List<Restaurant> restaurantList) {
+    public AdapterRestaurantCard(Context context, List<Restaurant> restaurantList) {
+        this.context = context;
         this.restaurantList = restaurantList;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        binding = AdapterRestaurantCardBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        binding = AdapterRestaurantCardBinding.inflate(LayoutInflater.from(context), parent, false);
+
         return new ViewHolder(binding.getRoot());
     }
 
@@ -41,11 +45,17 @@ public class AdapterRestaurantCard extends RecyclerView.Adapter<AdapterRestauran
         return this.restaurantList != null ? this.restaurantList.size() : 0;
     }
 
+    public void updateRestaurants(List<Restaurant> list) {
+        this.restaurantList.clear();
+        this.restaurantList = list;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
 
         public ViewHolder(View itemView) {
             super(itemView);
+
         }
 
         public void onBind(int position) {
