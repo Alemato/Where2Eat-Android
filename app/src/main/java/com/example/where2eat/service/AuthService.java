@@ -55,7 +55,7 @@ public class AuthService extends IntentService {
 
             jsonBody.put("password", userNamePassword.getPassword());
 
-            JsonObjectRequestAndHeader authReq = new JsonObjectRequestAndHeader(Request.Method.POST, "http://192.168.0.160:8080/api/login", jsonBody, new Response.Listener<JSONObject>() {
+            JsonObjectRequestAndHeader authReq = new JsonObjectRequestAndHeader(Request.Method.POST, "http://192.168.178.37:8080/api/login", jsonBody, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     User user = new User();

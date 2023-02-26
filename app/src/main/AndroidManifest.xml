@@ -26,9 +26,12 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".service.AuthService"
-            android:exported="true"
-            />
+        <service
+            android:name=".service.AuthService"
+            android:exported="true" />
+        <service
+            android:name=".service.RestaurantService"
+            android:exported="true" />
     </application>
 
 </manifest>

@@ -22,11 +22,15 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.where2eat.databinding.FragmentLoginBinding;
+import com.example.where2eat.domain.modal.Restaurant;
 import com.example.where2eat.domain.modal.User;
 import com.example.where2eat.domain.modal.UserNamePassword;
 import com.example.where2eat.roomdatabase.DBHelper;
 import com.example.where2eat.service.AuthService;
+import com.example.where2eat.service.RestaurantService;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -35,6 +39,7 @@ public class LoginFragment extends Fragment {
     FragmentLoginBinding binding = null;
     private boolean isProgressVisible = false;
     private UserViewModel viewModel;
+    private RestaurantViewModal restaurantViewModal;
 
     private KeyListener pwd;
     private KeyListener usr;
@@ -46,21 +51,35 @@ public class LoginFragment extends Fragment {
                 String action = intent.getAction();
                 switch (action) {
                     case AuthService.LOGIN_SUCCESSFUL:
-                        unlockLogin(pwd, usr);
                         new Thread(() -> {
                             User user = DBHelper.getInstance(requireContext()).getUserDao().getUser();
                             if (user != null && !Objects.equals(user, new User())) {
                                 viewModel.setUserAnotherThread(user);
                             }
-                            binding.textUserNameLogin.post(() -> {
-                                final NavController navController = Navigation.findNavController(requireView());
-                                navController.navigate(R.id.homeFragment);
-                            });
+                            downloadRestauransts();
                         }).start();
                         return;
                     case AuthService.LOGIN_ERROR:
                         unlockLogin(pwd, usr);
                         Toast.makeText(requireContext(), "Errore di Autenticazione", Toast.LENGTH_SHORT).show();
+                        return;
+                    case RestaurantService.DOWNLOAD_RESTAURANTS_COMPLETED:
+                        new Thread(() -> {
+                            List<Restaurant> restaurantList = DBHelper.getInstance(requireContext()).getRestaurantDao().findAll();
+                            if (restaurantList != null && !restaurantList.equals(new ArrayList<>()) && restaurantList.size() > 0) {
+                                restaurantViewModal.setRestaurantList(restaurantList);
+                            }
+                            binding.textUserNameLogin.post(() -> {
+                                unlockLogin(pwd, usr);
+                                final NavController navController = Navigation.findNavController(requireView());
+                                navController.navigate(R.id.homeFragment);
+                            });
+                        }).start();
+                        return;
+                    case RestaurantService.DOWNLOAD_RESTAURANTS_ERROR:
+                        unlockLogin(pwd, usr);
+                        Toast.makeText(requireContext(), "Errore nella ripresa dei ristoranti", Toast.LENGTH_SHORT).show();
+                        requireActivity().finish();
                         return;
                 }
             }
@@ -79,6 +98,7 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+        restaurantViewModal = new ViewModelProvider(requireActivity()).get(RestaurantViewModal.class);
         binding.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,6 +163,8 @@ public class LoginFragment extends Fragment {
         IntentFilter filter = new IntentFilter();
         filter.addAction(AuthService.LOGIN_ERROR);
         filter.addAction(AuthService.LOGIN_SUCCESSFUL);
+        filter.addAction(RestaurantService.DOWNLOAD_RESTAURANTS_COMPLETED);
+        filter.addAction(RestaurantService.DOWNLOAD_RESTAURANTS_ERROR);
         LocalBroadcastManager.getInstance(requireContext())
                 .registerReceiver(receiver, filter);
     }
@@ -159,5 +181,12 @@ public class LoginFragment extends Fragment {
         }
         LocalBroadcastManager.getInstance(requireContext())
                 .unregisterReceiver(receiver);
+    }
+
+    private void downloadRestauransts() {
+        System.out.println("downloadRestauransts");
+        Intent intent = new Intent(requireContext(), RestaurantService.class);
+        intent.putExtra(RestaurantService.KEY_DOWNLOAD_RESTAURANTS, RestaurantService.DOWNLOAD_RESTAURANTS);
+        requireActivity().startService(intent);
     }
 }

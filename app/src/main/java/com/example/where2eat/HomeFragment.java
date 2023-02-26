@@ -45,12 +45,6 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
 
@@ -59,9 +53,8 @@ public class HomeFragment extends Fragment {
             public void run() {
                 restaurantList.clear();
 
-
                 // RoomDatabase
-                restaurantList.addAll(DBHelper.getInstance(getContext()).getRestaurantDao().findAll());
+                //restaurantList.addAll(DBHelper.getInstance(getContext()).getRestaurantDao().findAll());
 
                 binding.textTitleHome.post(new Runnable() {
                     @Override

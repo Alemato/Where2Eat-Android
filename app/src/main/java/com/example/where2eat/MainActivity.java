@@ -15,11 +15,14 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.where2eat.databinding.ActivityMainBinding;
 import com.example.where2eat.roomdatabase.DBHelper;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding = null;
 
     private UserViewModel userViewModel;
+    private RestaurantViewModal restaurantViewModal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +63,12 @@ public class MainActivity extends AppCompatActivity {
                 (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
         NavController navController = navHostFragment.getNavController();
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        restaurantViewModal = new ViewModelProvider(this).get(RestaurantViewModal.class);
         new Thread(() -> {
             DBHelper.getInstance(getApplicationContext()).getUserDao().deleteAll();
             DBHelper.getInstance(getApplicationContext()).getRestaurantDao().deleteAll();
             userViewModel.setUserAnotherThread(null);
+            restaurantViewModal.setRestaurantList(new ArrayList<>());
             binding.fragmentContainerView.post(() -> {
                 Toast.makeText(getApplicationContext(), "Logout Effettuato con successo", Toast.LENGTH_SHORT).show();
                 navController.navigate(R.id.loginFragment);
