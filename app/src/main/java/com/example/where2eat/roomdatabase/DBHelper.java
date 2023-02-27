@@ -6,12 +6,14 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
+import com.example.where2eat.domain.modal.Booking;
 import com.example.where2eat.domain.modal.Restaurant;
 import com.example.where2eat.domain.modal.User;
 
-@Database(entities = {Restaurant.class, User.class}, version = 1)
+@Database(entities = {Restaurant.class, User.class, Booking.class}, version = 1)
 public abstract class DBHelper extends RoomDatabase {
 
+    public abstract BookingDao getBookingDao();
     public abstract RestaurantDao getRestaurantDao();
 
     public abstract UserDao getUserDao();

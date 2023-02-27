@@ -22,11 +22,13 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.where2eat.databinding.FragmentLoginBinding;
+import com.example.where2eat.domain.modal.Booking;
 import com.example.where2eat.domain.modal.Restaurant;
 import com.example.where2eat.domain.modal.User;
 import com.example.where2eat.domain.modal.UserNamePassword;
 import com.example.where2eat.roomdatabase.DBHelper;
 import com.example.where2eat.service.AuthService;
+import com.example.where2eat.service.BookingService;
 import com.example.where2eat.service.RestaurantService;
 
 import java.util.ArrayList;
@@ -40,6 +42,7 @@ public class LoginFragment extends Fragment {
     private boolean isProgressVisible = false;
     private UserViewModel viewModel;
     private RestaurantViewModal restaurantViewModal;
+    private BookingViewModel bookingViewModel;
 
     private KeyListener pwd;
     private KeyListener usr;
@@ -69,11 +72,7 @@ public class LoginFragment extends Fragment {
                             if (restaurantList != null && !restaurantList.equals(new ArrayList<>()) && restaurantList.size() > 0) {
                                 restaurantViewModal.setRestaurantList(restaurantList);
                             }
-                            binding.textUserNameLogin.post(() -> {
-                                unlockLogin(pwd, usr);
-                                final NavController navController = Navigation.findNavController(requireView());
-                                navController.navigate(R.id.homeFragment);
-                            });
+                            downloadBookings();
                         }).start();
                         return;
                     case RestaurantService.DOWNLOAD_RESTAURANTS_ERROR:
@@ -82,6 +81,26 @@ public class LoginFragment extends Fragment {
                         requireActivity().finish();
                         //TODO Reset all invece di finish()
                         return;
+                    case BookingService.DOWNLOAD_BOOKINGS_SUCCESSFUL:
+                        new Thread(() -> {
+                            List<Booking> bookingList = DBHelper.getInstance(requireContext()).getBookingDao().findAll();
+                            if (bookingList != null && !bookingList.equals(new ArrayList<>()) && bookingList.size() > 0) {
+                                bookingViewModel.setBookingList(bookingList);
+                            }
+                            binding.textUserNameLogin.post(() -> {
+                                unlockLogin(pwd, usr);
+                                final NavController navController = Navigation.findNavController(requireView());
+                                navController.navigate(R.id.homeFragment);
+                            });
+                        }).start();
+                        return;
+                    case BookingService.DOWNLOAD_BOOKINGS_ERROR:
+                        unlockLogin(pwd, usr);
+                        Toast.makeText(requireContext(), "Errore nella ripresa delle Prenotazioni", Toast.LENGTH_SHORT).show();
+                        //requireActivity().finish();
+                        //TODO Reset all invece di finish()
+                        return;
+
                 }
             }
         }
@@ -92,6 +111,8 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentLoginBinding.inflate(inflater, container, false);
+        pwd = binding.textPasswordLogin.getKeyListener();
+        usr = binding.textUserNameLogin.getKeyListener();
         return binding.getRoot();
     }
 
@@ -100,11 +121,10 @@ public class LoginFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
         restaurantViewModal = new ViewModelProvider(requireActivity()).get(RestaurantViewModal.class);
+        bookingViewModel = new ViewModelProvider(requireActivity()).get(BookingViewModel.class);
         binding.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pwd = binding.textPasswordLogin.getKeyListener();
-                usr = binding.textUserNameLogin.getKeyListener();
                 if (isProgressVisible) {
                     unlockLogin(pwd, usr);
                 } else {
@@ -134,26 +154,29 @@ public class LoginFragment extends Fragment {
     private void blockLogin() {
         isProgressVisible = true;
         binding.progressBarLogin.setVisibility(View.VISIBLE);
-        binding.textPasswordLogin.setFocusable(false);
+        // binding.textPasswordLogin.setFocusable(false);
         binding.textPasswordLogin.setEnabled(false);
-        binding.textPasswordLogin.setCursorVisible(false);
-        binding.textPasswordLogin.setKeyListener(null);
-        binding.textUserNameLogin.setFocusable(false);
+        /* binding.textPasswordLogin.setCursorVisible(false);
+           binding.textPasswordLogin.setKeyListener(null);
+           binding.textUserNameLogin.setFocusable(false); */
         binding.textUserNameLogin.setEnabled(false);
-        binding.textUserNameLogin.setCursorVisible(false);
-        binding.textUserNameLogin.setKeyListener(null);
+        /* binding.textUserNameLogin.setCursorVisible(false);
+           binding.textUserNameLogin.setKeyListener(null); */
     }
 
     private void unlockLogin(KeyListener pwd, KeyListener usr) {
         binding.progressBarLogin.setVisibility(View.GONE);
-        binding.textPasswordLogin.setFocusable(true);
+        //binding.textPasswordLogin.setFocusable(true);
+        System.out.println(binding.textPasswordLogin.isFocusable());
         binding.textPasswordLogin.setEnabled(true);
-        binding.textPasswordLogin.setCursorVisible(true);
-        binding.textPasswordLogin.setKeyListener(pwd);
-        binding.textUserNameLogin.setFocusable(true);
+        System.out.println(binding.textPasswordLogin.isEnabled());
+        //binding.textPasswordLogin.setCursorVisible(true);
+        System.out.println(binding.textPasswordLogin.isCursorVisible());
+        //binding.textPasswordLogin.setKeyListener(pwd);
+        //binding.textUserNameLogin.setFocusable(true);
         binding.textUserNameLogin.setEnabled(true);
-        binding.textUserNameLogin.setCursorVisible(true);
-        binding.textUserNameLogin.setKeyListener(usr);
+        //binding.textUserNameLogin.setCursorVisible(true);
+        //binding.textUserNameLogin.setKeyListener(usr);
         isProgressVisible = false;
     }
 
@@ -166,6 +189,8 @@ public class LoginFragment extends Fragment {
         filter.addAction(AuthService.LOGIN_SUCCESSFUL);
         filter.addAction(RestaurantService.DOWNLOAD_RESTAURANTS_COMPLETED);
         filter.addAction(RestaurantService.DOWNLOAD_RESTAURANTS_ERROR);
+        filter.addAction(BookingService.DOWNLOAD_BOOKINGS_SUCCESSFUL);
+        filter.addAction(BookingService.DOWNLOAD_BOOKINGS_ERROR);
         LocalBroadcastManager.getInstance(requireContext())
                 .registerReceiver(receiver, filter);
     }
@@ -185,9 +210,14 @@ public class LoginFragment extends Fragment {
     }
 
     private void downloadRestauransts() {
-        System.out.println("downloadRestauransts");
         Intent intent = new Intent(requireContext(), RestaurantService.class);
         intent.putExtra(RestaurantService.KEY_DOWNLOAD_RESTAURANTS, RestaurantService.DOWNLOAD_RESTAURANTS);
+        requireActivity().startService(intent);
+    }
+
+    private void downloadBookings() {
+        Intent intent = new Intent(requireContext(), BookingService.class);
+        intent.putExtra(BookingService.KEY_BOOKING_ACTION, BookingService.ACTION_DOWNLOAD_BOOKINGS);
         requireActivity().startService(intent);
     }
 }

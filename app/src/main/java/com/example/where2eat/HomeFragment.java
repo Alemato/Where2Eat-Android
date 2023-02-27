@@ -45,32 +45,18 @@ public class HomeFragment extends Fragment {
 
         restaurantViewModal = new ViewModelProvider(requireActivity()).get(RestaurantViewModal.class);
         userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
-        restaurantViewModal.getRestaurantList().observe(getViewLifecycleOwner(), restaurants -> {
-            restaurantList = restaurants;
-            adapterRestaurantCard.updateRestaurants(restaurantList);
-        });
+
         return binding.getRoot();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                restaurantList.clear();
-
-                // RoomDatabase
-                //restaurantList.addAll(DBHelper.getInstance(getContext()).getRestaurantDao().findAll());
-
-                binding.textTitleHome.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapterRestaurantCard.notifyDataSetChanged();
-                    }
-                });
-            }
-        }).start();
+        restaurantList.clear();
+        restaurantViewModal.getRestaurantList().observe(getViewLifecycleOwner(), restaurants -> {
+            restaurantList.addAll(restaurants);
+            adapterRestaurantCard.notifyDataSetChanged();
+        });
     }
 
     @Override
