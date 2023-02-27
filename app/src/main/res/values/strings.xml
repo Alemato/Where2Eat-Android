@@ -10,4 +10,6 @@
     <string name="prenotazioni_effettuate">Bookings</string>
     <string name="home">Home</string>
     <string name="esci">Esci</string>
+    <string name="prenota_al_ristorante">Book Rrestaurant</string>
+    <string name="prenotazioni">Bookings</string>
 </resources>

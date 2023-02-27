@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
             navController.navigate(R.id.homeFragment);
             return true;
         } else if (item.getItemId() == R.id.menuPrenotazioni) {
-            navController.navigate(R.id.homeFragment);
+            navController.navigate(R.id.bookingFragment);
             return true;
         } else if (item.getItemId() == R.id.menuEsci) {
             logout();
