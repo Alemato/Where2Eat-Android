@@ -45,7 +45,7 @@ public class RestaurantService extends IntentService {
 
     private void restaurantsDownloadData() {
         Requests request = new Requests(getApplicationContext());
-        JsonArrayRequest downloadRequest = new JsonArrayRequest("http://192.168.178.37:8080/api/ristoranti", new Response.Listener<JSONArray>() {
+        JsonArrayRequest downloadRequest = new JsonArrayRequest("http://192.168.0.160:8080/api/ristoranti", new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 System.out.println("@@@@@@@@@@@@@@@@");

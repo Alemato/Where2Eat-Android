@@ -100,7 +100,7 @@ public class Restaurant implements Serializable {
         if (immagini != null && immagini.length() > 0) {
             //restaurant.setImmagine(restaurant.getId() + "/immagine-copertina");
             try {
-                String url = "http://192.168.178.37:8080/api/uploads/" + immagini.getJSONObject(0).optString("path");
+                String url = "http://192.168.0.160:8080/api/uploads/" + immagini.getJSONObject(0).optString("path");
                 restaurant.setImmagine(url);
             } catch (JSONException e) {
                 throw new RuntimeException(e);

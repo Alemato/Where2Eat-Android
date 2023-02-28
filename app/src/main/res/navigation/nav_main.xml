@@ -23,4 +23,16 @@
         android:id="@+id/bookingFragment"
         android:name="com.example.where2eat.BookingFragment"
         android:label="BookingFragment" />
+    <fragment
+        android:id="@+id/ristorantiMapFragment"
+        android:name="com.example.where2eat.RistorantiMapFragment"
+        android:label="RistorantiMapFragment" >
+        <action
+            android:id="@+id/action_ristorantiMapFragment_to_restaurantDetailsFragment"
+            app:destination="@id/restaurantDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createBookingFragment"
+        android:name="com.example.where2eat.CreateBookingFragment"
+        android:label="CreateBookingFragment" />
 </navigation>

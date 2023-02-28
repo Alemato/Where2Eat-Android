@@ -27,8 +27,8 @@
             </intent-filter>
         </activity>
 
-<!--        <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_map_api" />-->
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_map_api" />
 
         <service
             android:name=".service.AuthService"

@@ -167,11 +167,8 @@ public class LoginFragment extends Fragment {
     private void unlockLogin(KeyListener pwd, KeyListener usr) {
         binding.progressBarLogin.setVisibility(View.GONE);
         //binding.textPasswordLogin.setFocusable(true);
-        System.out.println(binding.textPasswordLogin.isFocusable());
         binding.textPasswordLogin.setEnabled(true);
-        System.out.println(binding.textPasswordLogin.isEnabled());
         //binding.textPasswordLogin.setCursorVisible(true);
-        System.out.println(binding.textPasswordLogin.isCursorVisible());
         //binding.textPasswordLogin.setKeyListener(pwd);
         //binding.textUserNameLogin.setFocusable(true);
         binding.textUserNameLogin.setEnabled(true);

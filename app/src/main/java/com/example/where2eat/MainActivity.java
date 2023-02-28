@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
             navController.navigate(R.id.homeFragment);
             return true;
         } else if (item.getItemId() == R.id.menuMappa) {
-            navController.navigate(R.id.homeFragment);
+            navController.navigate(R.id.ristorantiMapFragment);
             return true;
         } else if (item.getItemId() == R.id.menuPrenotazioni) {
             navController.navigate(R.id.bookingFragment);
@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         new Thread(() -> {
             DBHelper.getInstance(getApplicationContext()).getUserDao().deleteAll();
             DBHelper.getInstance(getApplicationContext()).getRestaurantDao().deleteAll();
+            DBHelper.getInstance(getApplicationContext()).getBookingDao().deleteAll();
             userViewModel.setUserAnotherThread(null);
             restaurantViewModal.setRestaurantList(new ArrayList<>());
             binding.fragmentContainerView.post(() -> {

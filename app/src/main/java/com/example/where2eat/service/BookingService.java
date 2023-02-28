@@ -8,10 +8,15 @@ import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.example.where2eat.domain.modal.Booking;
+import com.example.where2eat.domain.modal.CreateBooking;
+import com.example.where2eat.domain.modal.UserNamePassword;
 import com.example.where2eat.roomdatabase.DBHelper;
 
 import org.json.JSONArray;
@@ -24,6 +29,7 @@ import java.util.Objects;
 
 public class BookingService extends IntentService {
     public static final String KEY_BOOKING_ACTION = "download_booking_action";
+    public static final String KEY_CREATE_BOOKING_OBJ = "createBookingOBJ";
 
     public static final int ACTION_DOWNLOAD_BOOKINGS = 0;
     public static final int ACTION_BOOKING_CREATE = 1;
@@ -42,7 +48,11 @@ public class BookingService extends IntentService {
         int action = Objects.requireNonNull(intent).getIntExtra(KEY_BOOKING_ACTION, -1);
         if (action == ACTION_DOWNLOAD_BOOKINGS) {
             downloadAllPrenotazioni();
-        } // Nothing
+        } else if (action == ACTION_BOOKING_CREATE){
+            CreateBooking createBooking = (CreateBooking) intent.getSerializableExtra(KEY_CREATE_BOOKING_OBJ);
+            if(createBooking != null) createBookingServer(createBooking);
+
+        }// Nothing
     }
 
     private void downloadAllPrenotazioni() {
@@ -55,7 +65,7 @@ public class BookingService extends IntentService {
             return;
         }
         Requests request = new Requests(getApplicationContext());
-        JsonArrayRequest downloadRequest = new JsonArrayRequest("http://192.168.178.37:8080/api/prenotazioni", new Response.Listener<JSONArray>() {
+        JsonArrayRequest downloadRequest = new JsonArrayRequest("http://192.168.0.160:8080/api/prenotazioni", new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 System.out.println(response);
@@ -96,5 +106,44 @@ public class BookingService extends IntentService {
             }
         };
         request.getQueue().add(downloadRequest);
+    }
+
+    private void createBookingServer(CreateBooking createBooking){
+        String token = DBHelper.getInstance(getApplicationContext()).getUserDao().getToken();
+        if(token == null || token.equals("")) {
+            Intent intent = new Intent(BOOKING_CREATE_ERROR);
+            LocalBroadcastManager.getInstance(getApplicationContext())
+                    .sendBroadcast(intent);
+            System.err.println("Token vuoto");
+            return;
+        }
+        Requests request = new Requests(getApplicationContext());
+        JSONObject jsonBody = createBooking.encodeJson();
+        EmptyResponseJsonObjectRequest createBookingReq = new EmptyResponseJsonObjectRequest(Request.Method.POST, "http://192.168.0.160:8080/api/prenotazioni", jsonBody, new Response.Listener<JSONObject>(){
+           @Override
+           public void onResponse(JSONObject response) {
+               Intent intent = new Intent();
+               intent.setAction(BOOKING_CREATE_SUCCESSFUL);
+               LocalBroadcastManager.getInstance(getApplicationContext())
+                       .sendBroadcast(intent);
+           }
+       }, new Response.ErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Intent intent = new Intent(BOOKING_CREATE_ERROR);
+                LocalBroadcastManager.getInstance(getApplicationContext())
+                        .sendBroadcast(intent);
+                System.err.println(error);
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> mHeaders = new ArrayMap<String, String>();
+                mHeaders.put("Authorization", token);
+                return mHeaders;
+            }
+        };
+
+        request.getQueue().add(createBookingReq);
     }
 }

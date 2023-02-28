@@ -22,4 +22,9 @@
     <string name="voto">Vote</string>
     <string name="tipidicucina">types of cooking</string>
     <string name="servizi">Services</string>
+    <string name="effettua_una_prenotazione">Effettua Una Prenotazione</string>
+    <string name="data_di_prenotazione">Data di Prenotazione</string>
+    <string name="ora">Ora</string>
+    <string name="numero_di_posti">Numero di Posti</string>
+    <string name="crea_una_prenotazione">Crea una Prenotazione</string>
 </resources>

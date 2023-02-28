@@ -103,7 +103,7 @@ public class Booking {
             if (immagini != null && immagini.length() > 0) {
                 //restaurant.setImmagine(restaurant.getId() + "/immagine-copertina");
 
-                String url = "http://192.168.178.37:8080/api/uploads/" + immagini.getJSONObject(0).optString("path");
+                String url = "http://192.168.0.160:8080/api/uploads/" + immagini.getJSONObject(0).optString("path");
                 booking.setImmagine(url);
 
             }

@@ -46,7 +46,7 @@ public class RestaurantDetailsFragment extends Fragment {
 
             binding.imageRestaurantDetails.setImageUrl(rest.getImmagine(), VolleyRequests.getInstance(binding.imageRestaurantDetails.getContext()).getImageLoader());
             binding.bottonePrenotaRestaurantDetails.setOnClickListener(v -> {
-                navController.navigate(R.id.homeFragment);
+                navController.navigate(R.id.createBookingFragment);
             });
         });
     }
