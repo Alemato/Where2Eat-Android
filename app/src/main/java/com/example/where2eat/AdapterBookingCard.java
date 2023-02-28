@@ -14,9 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.where2eat.databinding.AdapterBookingsCardBinding;
 import com.example.where2eat.domain.modal.Booking;
 import com.example.where2eat.domain.modal.Restaurant;
+import com.example.where2eat.roomdatabase.DBHelper;
 import com.example.where2eat.tools.VolleyRequests;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 public class AdapterBookingCard extends RecyclerView.Adapter<AdapterBookingCard.ViewHolder> {
@@ -25,10 +29,10 @@ public class AdapterBookingCard extends RecyclerView.Adapter<AdapterBookingCard.
     AdapterBookingsCardBinding binding = null;
     private Context context;
     private List<Booking> bookingList;
-    private BookingViewModel bookingViewModel;
 
     private RestaurantViewModal restaurantViewModal;
 
+    private List<Restaurant> restaurantList = new ArrayList<>();
     NavController navController;
 
     public AdapterBookingCard(Context context, List<Booking> bookingList) {
@@ -40,8 +44,9 @@ public class AdapterBookingCard extends RecyclerView.Adapter<AdapterBookingCard.
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         binding = AdapterBookingsCardBinding.inflate(LayoutInflater.from(context), parent, false);
-        bookingViewModel = new ViewModelProvider(((MainActivity) context)).get(BookingViewModel.class);
         navController = Navigation.findNavController(parent);
+        restaurantViewModal = new ViewModelProvider(((MainActivity) context)).get(RestaurantViewModal.class);
+
         return new ViewHolder(binding.getRoot());
     }
 
@@ -59,17 +64,25 @@ public class AdapterBookingCard extends RecyclerView.Adapter<AdapterBookingCard.
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            //Restaurant restaurant = bookingList.get(getAdapterPosition()).getRistoranteId();
-            //restaurantViewModal.setRestaurant(restaurant);
-            binding.textRagioneSocialeCardBooking.setOnClickListener(v -> {
-                navController.navigate(R.id.restaurantDetailsFragment);
-            });
+
+            new Thread(() -> {
+                List<Restaurant> list = DBHelper.getInstance((MainActivity) context).getRestaurantDao().findAll();
+                restaurantList.clear();
+                restaurantList.addAll(list);
+                Restaurant restaurant = restaurantList.stream().filter(r -> Objects.equals(r.getId(), bookingList.get(getAdapterPosition()).getRistoranteId())).collect(Collectors.toList()).get(0);
+                restaurantViewModal.setRestaurant(restaurant);
+                binding.textRagioneSocialeCardBooking.post(() -> {
+                    itemView.setOnClickListener(v -> {
+                        navController.navigate(R.id.restaurantDetailsFragment);
+                    });
+                });
+            }).start();
+
         }
 
         public void onBind(int position) {
             Booking booking = bookingList.get(position);
             binding.setBooking(booking);
-            binding.imageViewCardBooking.setImageUrl(booking.getImmagine(), VolleyRequests.getInstance(binding.imageViewCardBooking.getContext()).getImageLoader());
         }
     }
 

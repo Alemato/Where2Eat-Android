@@ -13,4 +13,14 @@
     <string name="esci">Esci</string>
     <string name="prenota_al_ristorante">Prenota al Ristorante</string>
     <string name="prenotazioni">Prenotazioni</string>
+    <string name="localit">Località</string>
+    <string name="indirizzo">Indirizzo</string>
+    <string name="posti">Posti</string>
+    <string name="email">Email</string>
+    <string name="telefono">Telefono</string>
+    <string name="descrizione">Descrizione</string>
+    <string name="pagamento">Pagamento</string>
+    <string name="voto">Voto</string>
+    <string name="tipidicucina">Tipi di cucina</string>
+    <string name="servizi">Servizi</string>
 </resources>
