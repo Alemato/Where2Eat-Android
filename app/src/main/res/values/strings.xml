@@ -36,4 +36,5 @@
     <string name="errore_creazione_prenotazione">Error in creating the booking</string>
     <string name="errore_ripresa_prenotazione_riesegui_login">Error in taking Reservations! Please login again!</string>
     <string name="errore_non_connesso_riesegui_login">Error, You are not connected to the internet! Please login again!</string>
+    <string name="logout_effettuato">Logout Done successfully!</string>
 </resources>

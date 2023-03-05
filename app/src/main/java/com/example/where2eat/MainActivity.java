@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             restaurantViewModal.setRestaurant(null);
             bookingViewModel.setBookingList(new ArrayList<>());
             binding.fragmentContainerView.post(() -> {
-                Toast.makeText(getApplicationContext(), "Logout Effettuato con successo", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.logout_effettuato), Toast.LENGTH_SHORT).show();
                 navController.navigate(R.id.loginFragment);
             });
         }).start();

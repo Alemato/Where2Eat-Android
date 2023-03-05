@@ -37,4 +37,5 @@
     <string name="errore_creazione_prenotazione">Errore nella creazione della prenotazione</string>
     <string name="errore_ripresa_prenotazione_riesegui_login">Errore nella ripresa delle Prenotazioni! Riesegui la login!</string>
     <string name="errore_non_connesso_riesegui_login">Errore, Non sei connesso ad internet! Riesegui la login!</string>
+    <string name="logout_effettuato">Logout Effettuato con successo!</string>
 </resources>
