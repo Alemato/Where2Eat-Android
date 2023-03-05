@@ -9,7 +9,7 @@
     <string name="mappa">Map</string>
     <string name="prenotazioni_effettuate">Bookings</string>
     <string name="home">Home</string>
-    <string name="esci">Esci</string>
+    <string name="esci">Logout</string>
     <string name="prenota_al_ristorante">Book Rrestaurant</string>
     <string name="prenotazioni">Bookings</string>
     <string name="localit">Location</string>
@@ -20,12 +20,20 @@
     <string name="descrizione">Description</string>
     <string name="pagamento">Payment</string>
     <string name="voto">Vote</string>
-    <string name="tipidicucina">types of cooking</string>
+    <string name="tipidicucina">Types of cooking</string>
     <string name="servizi">Services</string>
-    <string name="effettua_una_prenotazione">Effettua Una Prenotazione</string>
-    <string name="data_di_prenotazione">Data di Prenotazione</string>
-    <string name="ora">Ora</string>
-    <string name="numero_di_posti">Numero di Posti</string>
-    <string name="crea_una_prenotazione">Crea una Prenotazione</string>
+    <string name="effettua_una_prenotazione">Create a Booking</string>
+    <string name="data_di_prenotazione">Booking Date</string>
+    <string name="ora">Time</string>
+    <string name="numero_di_posti">Number of Seats</string>
+    <string name="crea_una_prenotazione">Create a Booking</string>
     <string name="marker">marker</string>
+    <string name="errore_non_sei_connesso_internet">Error, You are not connected to the internet! Please try again!</string>
+    <string name="errore_autenticazione">Authentication Error</string>
+    <string name="errore_ripresa_ristoranti">Error in the recovery of restaurants</string>
+    <string name="errore_ripresa_prenotazioni">Error in taking Reservations</string>
+    <string name="errore_riempi_campi_login">Fill in the fields before effecting login!</string>
+    <string name="errore_creazione_prenotazione">Error in creating the booking</string>
+    <string name="errore_ripresa_prenotazione_riesegui_login">Error in taking Reservations! Please login again!</string>
+    <string name="errore_non_connesso_riesegui_login">Error, You are not connected to the internet! Please login again!</string>
 </resources>

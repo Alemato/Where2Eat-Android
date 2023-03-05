@@ -60,7 +60,7 @@ public class CreateBookingFragment extends Fragment {
                         return;
                     case BookingService.BOOKING_CREATE_ERROR:
                         unlockCreateBooking();
-                        Toast.makeText(requireContext(), "Errore nella creazione della prenotazione", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), getString(R.string.errore_creazione_prenotazione), Toast.LENGTH_SHORT).show();
                         return;
                     case BookingService.DOWNLOAD_BOOKINGS_SUCCESSFUL:
                         new Thread(() -> {
@@ -77,16 +77,16 @@ public class CreateBookingFragment extends Fragment {
                         return;
                     case BookingService.DOWNLOAD_BOOKINGS_ERROR:
                         unlockCreateBooking();
-                        Toast.makeText(requireContext(), "Errore nella ripresa delle Prenotazioni! Riesegui la login!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), getString(R.string.errore_ripresa_prenotazione_riesegui_login), Toast.LENGTH_SHORT).show();
                         logout();
                         return;
                     case BookingService.INTERNET_CREATE_BOOKING_ERROR:
                         unlockCreateBooking();
-                        Toast.makeText(requireContext(), "Errore, Non sei connesso ad internet! Riprova", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), getString(R.string.errore_non_sei_connesso_internet), Toast.LENGTH_SHORT).show();
                         return;
                     case BookingService.INTERNET_BOOKING_ERROR:
                         unlockCreateBooking();
-                        Toast.makeText(requireContext(), "Errore, Non sei connesso ad internet! Riesegui la login!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), getString(R.string.errore_non_connesso_riesegui_login), Toast.LENGTH_SHORT).show();
                         logout();
                         return;
                 }

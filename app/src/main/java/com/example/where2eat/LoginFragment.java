@@ -63,14 +63,14 @@ public class LoginFragment extends Fragment {
                         return;
                     case AuthService.LOGIN_ERROR:
                         unlockLogin();
-                        Toast.makeText(requireContext(), "Errore di Autenticazione", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), getString(R.string.errore_autenticazione), Toast.LENGTH_SHORT).show();
                         return;
                     case AuthService.INTERNET_LOGIN_ERROR:
                     case BookingService.INTERNET_BOOKING_ERROR:
                     case RestaurantService.INTERNET_RESTAURANTS_ERROR:
                         unlockLogin();
                         logout();
-                        Toast.makeText(requireContext(), "Errore, Non sei connesso ad internet!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), getString(R.string.errore_non_sei_connesso_internet), Toast.LENGTH_SHORT).show();
                         return;
                     case RestaurantService.DOWNLOAD_RESTAURANTS_COMPLETED:
                         new Thread(() -> {
@@ -83,7 +83,7 @@ public class LoginFragment extends Fragment {
                         return;
                     case RestaurantService.DOWNLOAD_RESTAURANTS_ERROR:
                         unlockLogin();
-                        Toast.makeText(requireContext(), "Errore nella ripresa dei ristoranti", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), getString(R.string.errore_ripresa_ristoranti), Toast.LENGTH_SHORT).show();
                         logout();
                         return;
                     case BookingService.DOWNLOAD_BOOKINGS_SUCCESSFUL:
@@ -101,7 +101,7 @@ public class LoginFragment extends Fragment {
                         return;
                     case BookingService.DOWNLOAD_BOOKINGS_ERROR:
                         unlockLogin();
-                        Toast.makeText(requireContext(), "Errore nella ripresa delle Prenotazioni", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), getString(R.string.errore_ripresa_prenotazioni), Toast.LENGTH_SHORT).show();
                         logout();
                         return;
                 }
@@ -138,7 +138,7 @@ public class LoginFragment extends Fragment {
                         blockLogin();
                     }
                 } else {
-                    Toast.makeText(requireContext(), "Riempi i campi prima di effettaure la login!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), getString(R.string.errore_riempi_campi_login), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -173,7 +173,6 @@ public class LoginFragment extends Fragment {
 
     @Override
     public void onResume() {
-        System.out.println("Resume Login");
         super.onResume();
         IntentFilter filter = new IntentFilter();
         filter.addAction(AuthService.LOGIN_ERROR);

@@ -29,4 +29,12 @@
     <string name="numero_di_posti">Numero di Posti</string>
     <string name="crea_una_prenotazione">Crea una Prenotazione</string>
     <string name="marker">marker</string>
+    <string name="errore_non_sei_connesso_internet">Errore, Non sei connesso ad internet! Riprova</string>
+    <string name="errore_autenticazione">Errore di Autenticazione</string>
+    <string name="errore_ripresa_ristoranti">Errore nella ripresa dei ristoranti</string>
+    <string name="errore_ripresa_prenotazioni">Errore nella ripresa delle Prenotazioni</string>
+    <string name="errore_riempi_campi_login">Riempi i campi prima di effettaure la login!</string>
+    <string name="errore_creazione_prenotazione">Errore nella creazione della prenotazione</string>
+    <string name="errore_ripresa_prenotazione_riesegui_login">Errore nella ripresa delle Prenotazioni! Riesegui la login!</string>
+    <string name="errore_non_connesso_riesegui_login">Errore, Non sei connesso ad internet! Riesegui la login!</string>
 </resources>
