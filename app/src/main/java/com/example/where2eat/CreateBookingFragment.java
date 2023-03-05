@@ -6,8 +6,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.text.method.KeyListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,13 +24,16 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.where2eat.databinding.FragmentCreateBookingBinding;
-import com.example.where2eat.domain.modal.Booking;
-import com.example.where2eat.domain.modal.CreateBooking;
-import com.example.where2eat.domain.modal.Restaurant;
+import com.example.where2eat.domain.model.Booking;
+import com.example.where2eat.domain.model.CreateBooking;
+import com.example.where2eat.domain.model.Restaurant;
+import com.example.where2eat.domain.viewmodel.UserViewModel;
 import com.example.where2eat.roomdatabase.DBHelper;
-import com.example.where2eat.service.AuthService;
 import com.example.where2eat.service.BookingService;
+import com.example.where2eat.domain.viewmodel.BookingViewModel;
+import com.example.where2eat.domain.viewmodel.RestaurantViewModal;
 
+import java.net.InetAddress;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -44,6 +47,7 @@ public class CreateBookingFragment extends Fragment {
     final Calendar timeCalendar = Calendar.getInstance();
     FragmentCreateBookingBinding binding = null;
     Restaurant restaurant;
+    private UserViewModel userViewModel;
     private RestaurantViewModal restaurantViewModal;
     private BookingViewModel bookingViewModel;
 
@@ -75,9 +79,17 @@ public class CreateBookingFragment extends Fragment {
                         return;
                     case BookingService.DOWNLOAD_BOOKINGS_ERROR:
                         unlockCreateBooking();
-                        Toast.makeText(requireContext(), "Errore nella ripresa delle Prenotazioni", Toast.LENGTH_SHORT).show();
-                        //requireActivity().finish();
-                        //TODO Reset all invece di finish()
+                        Toast.makeText(requireContext(), "Errore nella ripresa delle Prenotazioni! Riesegui la login!", Toast.LENGTH_SHORT).show();
+                        logout();
+                        return;
+                    case BookingService.INTERNET_CREATE_BOOKING_ERROR:
+                        unlockCreateBooking();
+                        Toast.makeText(requireContext(), "Errore, Non sei connesso ad internet! Riprova", Toast.LENGTH_SHORT).show();
+                        return;
+                    case BookingService.INTERNET_BOOKING_ERROR:
+                        unlockCreateBooking();
+                        Toast.makeText(requireContext(), "Errore, Non sei connesso ad internet! Riesegui la login!", Toast.LENGTH_SHORT).show();
+                        logout();
                         return;
                 }
             }
@@ -94,6 +106,7 @@ public class CreateBookingFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentCreateBookingBinding.inflate(inflater, container, false);
+        userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
         restaurantViewModal = new ViewModelProvider(requireActivity()).get(RestaurantViewModal.class);
         bookingViewModel = new ViewModelProvider(requireActivity()).get(BookingViewModel.class);
         return binding.getRoot();
@@ -102,10 +115,6 @@ public class CreateBookingFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-       /* restaurantViewModal.getRestaurantList().observe(getViewLifecycleOwner(), restaurants -> {
-            restaurantViewModal.setRestaurant(restaurants.get(restaurants.size() - 1));
-        });*/
-
         restaurantViewModal.getRestaurant().observe(getViewLifecycleOwner(), r -> {
             restaurant = r;
         });
@@ -204,6 +213,8 @@ public class CreateBookingFragment extends Fragment {
         filter.addAction(BookingService.BOOKING_CREATE_ERROR);
         filter.addAction(BookingService.DOWNLOAD_BOOKINGS_SUCCESSFUL);
         filter.addAction(BookingService.DOWNLOAD_BOOKINGS_ERROR);
+        filter.addAction(BookingService.INTERNET_BOOKING_ERROR);
+        filter.addAction(BookingService.INTERNET_CREATE_BOOKING_ERROR);
         LocalBroadcastManager.getInstance(requireContext())
                 .registerReceiver(receiver, filter);
     }
@@ -213,5 +224,21 @@ public class CreateBookingFragment extends Fragment {
         super.onDestroyView();
         LocalBroadcastManager.getInstance(requireContext())
                 .unregisterReceiver(receiver);
+    }
+
+    private void logout() {
+        new Thread(() -> {
+            DBHelper.getInstance(requireContext()).getUserDao().deleteAll();
+            DBHelper.getInstance(requireContext()).getRestaurantDao().deleteAll();
+            DBHelper.getInstance(requireContext()).getBookingDao().deleteAll();
+            userViewModel.setUser(null);
+            restaurantViewModal.setRestaurantList(new ArrayList<>());
+            restaurantViewModal.setRestaurant(null);
+            bookingViewModel.setBookingList(new ArrayList<>());
+            binding.textViewEffettuaPrenotazioneCreateBooking.post(()->{
+                final NavController navController = Navigation.findNavController(requireView());
+                navController.navigate(R.id.loginFragment);
+            });
+        }).start();
     }
 }

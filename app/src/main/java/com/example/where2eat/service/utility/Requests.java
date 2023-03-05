@@ -1,4 +1,4 @@
-package com.example.where2eat.service;
+package com.example.where2eat.service.utility;
 
 import android.content.Context;
 

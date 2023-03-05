@@ -1,4 +1,4 @@
-package com.example.where2eat.domain.modal;
+package com.example.where2eat.domain.model;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

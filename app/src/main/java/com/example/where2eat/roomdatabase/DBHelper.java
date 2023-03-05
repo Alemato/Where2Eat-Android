@@ -6,9 +6,9 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.example.where2eat.domain.modal.Booking;
-import com.example.where2eat.domain.modal.Restaurant;
-import com.example.where2eat.domain.modal.User;
+import com.example.where2eat.domain.model.Booking;
+import com.example.where2eat.domain.model.Restaurant;
+import com.example.where2eat.domain.model.User;
 
 @Database(entities = {Restaurant.class, User.class, Booking.class}, version = 1)
 public abstract class DBHelper extends RoomDatabase {

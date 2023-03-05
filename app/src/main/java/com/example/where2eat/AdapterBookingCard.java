@@ -12,10 +12,10 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.where2eat.databinding.AdapterBookingsCardBinding;
-import com.example.where2eat.domain.modal.Booking;
-import com.example.where2eat.domain.modal.Restaurant;
+import com.example.where2eat.domain.model.Booking;
+import com.example.where2eat.domain.model.Restaurant;
 import com.example.where2eat.roomdatabase.DBHelper;
-import com.example.where2eat.tools.VolleyRequests;
+import com.example.where2eat.domain.viewmodel.RestaurantViewModal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,10 +69,10 @@ public class AdapterBookingCard extends RecyclerView.Adapter<AdapterBookingCard.
                 List<Restaurant> list = DBHelper.getInstance((MainActivity) context).getRestaurantDao().findAll();
                 restaurantList.clear();
                 restaurantList.addAll(list);
-                Restaurant restaurant = restaurantList.stream().filter(r -> Objects.equals(r.getId(), bookingList.get(getAdapterPosition()).getRistoranteId())).collect(Collectors.toList()).get(0);
-                restaurantViewModal.setRestaurant(restaurant);
                 binding.textRagioneSocialeCardBooking.post(() -> {
                     itemView.setOnClickListener(v -> {
+                        Restaurant restaurant = restaurantList.stream().filter(r -> Objects.equals(r.getId(), bookingList.get(getAdapterPosition()).getRistoranteId())).collect(Collectors.toList()).get(0);
+                        restaurantViewModal.setRestaurant(restaurant);
                         navController.navigate(R.id.restaurantDetailsFragment);
                     });
                 });

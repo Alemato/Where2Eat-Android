@@ -12,7 +12,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.where2eat.databinding.FragmentBookingsBinding;
-import com.example.where2eat.domain.modal.Booking;
+import com.example.where2eat.domain.model.Booking;
+import com.example.where2eat.domain.viewmodel.BookingViewModel;
 
 import java.util.ArrayList;
 import java.util.List;

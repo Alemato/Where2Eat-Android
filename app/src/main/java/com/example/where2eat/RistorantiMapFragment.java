@@ -1,11 +1,15 @@
 package com.example.where2eat;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultCallback;
@@ -17,8 +21,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
-import com.example.where2eat.domain.modal.Restaurant;
+import com.example.where2eat.domain.model.Restaurant;
 import com.example.where2eat.tools.LocationTools;
+import com.example.where2eat.domain.viewmodel.RestaurantViewModal;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -103,8 +108,9 @@ public class RistorantiMapFragment extends Fragment implements OnMapReadyCallbac
             if(marker == null) {
                 MarkerOptions options = new MarkerOptions();
                 options.position(new LatLng(location.getLatitude(), location.getLongitude()));
-                options.title("MyLocation");
+                options.title("Sono qui");
                 marker = map.addMarker(options);
+                marker.showInfoWindow();
             } else {
                 marker.setPosition(new LatLng(location.getLatitude(), location.getLongitude()));
             }
@@ -120,8 +126,9 @@ public class RistorantiMapFragment extends Fragment implements OnMapReadyCallbac
                     bounds.include(position);
                     MarkerOptions options = new MarkerOptions();
                     options.position(position);
-                    options.title(r.getRagioneSociale());
-                    options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                    //options.title(r.getRagioneSociale());
+                    //options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                    options.icon(BitmapDescriptorFactory.fromBitmap(createStoreMarker(r.getRagioneSociale())));
                     requireView().post(() -> {
                         Marker m = map.addMarker(options);
                         m.setTag(r);
@@ -133,5 +140,22 @@ public class RistorantiMapFragment extends Fragment implements OnMapReadyCallbac
                 });
             }).start();
         });
+    }
+
+    private Bitmap createStoreMarker(String ragioneSociale) {
+        View markerLayout = getLayoutInflater().inflate(R.layout.layout_marker, null);
+
+        ImageView markerImage = (ImageView) markerLayout.findViewById(R.id.marker_image_l);
+        TextView markerRating = (TextView) markerLayout.findViewById(R.id.marker_text_l);
+        markerImage.setImageResource(R.drawable.baseline_place_48);
+        markerRating.setText(ragioneSociale);
+
+        markerLayout.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        markerLayout.layout(0, 0, markerLayout.getMeasuredWidth(), markerLayout.getMeasuredHeight());
+
+        final Bitmap bitmap = Bitmap.createBitmap(markerLayout.getMeasuredWidth(), markerLayout.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        markerLayout.draw(canvas);
+        return bitmap;
     }
 }

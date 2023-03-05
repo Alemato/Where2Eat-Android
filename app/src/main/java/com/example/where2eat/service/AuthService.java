@@ -1,23 +1,26 @@
 package com.example.where2eat.service;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.example.where2eat.UserViewModel;
-import com.example.where2eat.domain.modal.User;
-import com.example.where2eat.domain.modal.UserNamePassword;
+import com.example.where2eat.domain.model.User;
+import com.example.where2eat.domain.model.UserNamePassword;
 import com.example.where2eat.roomdatabase.DBHelper;
+import com.example.where2eat.service.utility.JsonObjectRequestAndHeader;
+import com.example.where2eat.service.utility.Requests;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.InetAddress;
 import java.util.Objects;
 
 
@@ -30,6 +33,7 @@ public class AuthService extends IntentService {
 
     public static final String LOGIN_SUCCESSFUL = "completed";
     public static final String LOGIN_ERROR = "error";
+    public static final String INTERNET_LOGIN_ERROR = "internet_login_error";
 
     public AuthService() {
         super(AuthService.class.getSimpleName());
@@ -37,16 +41,20 @@ public class AuthService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-
-        int action = Objects.requireNonNull(intent).getIntExtra(KEY_ACTION, -1);
-
-        if (action == ACTION_LOGIN) {
-            UserNamePassword userNamePassword = (UserNamePassword) intent.getSerializableExtra(KEY_USER_PASSWORD);
-            if (userNamePassword != null)
-                loginDownloadData(userNamePassword);
-        }// Nothing
+        if(isNetworkConnected()) {
+            int action = Objects.requireNonNull(intent).getIntExtra(KEY_ACTION, -1);
+            if (action == ACTION_LOGIN) {
+                UserNamePassword userNamePassword = (UserNamePassword) intent.getSerializableExtra(KEY_USER_PASSWORD);
+                if (userNamePassword != null)
+                    loginDownloadData(userNamePassword);
+            }
+        } else {
+            Intent intentError = new Intent(INTERNET_LOGIN_ERROR);
+            LocalBroadcastManager.getInstance(getApplicationContext())
+                    .sendBroadcast(intentError);
+        }
+        // Nothing
     }
-
     private void loginDownloadData(UserNamePassword userNamePassword) {
         Requests request = new Requests(getApplicationContext());
         try {
@@ -99,5 +107,21 @@ public class AuthService extends IntentService {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean isConnected = cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+        if (isConnected) {
+            try {
+                InetAddress ipAddr = InetAddress.getByName("www.google.com");
+                return !ipAddr.toString().equals("");
+            } catch (Exception e) {
+                System.out.println("eccezione");
+                return false;
+            }
+        }
+        return false;
     }
 }

@@ -9,11 +9,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.where2eat.databinding.ActivityMainBinding;
+import com.example.where2eat.domain.viewmodel.BookingViewModel;
 import com.example.where2eat.roomdatabase.DBHelper;
+import com.example.where2eat.domain.viewmodel.RestaurantViewModal;
+import com.example.where2eat.domain.viewmodel.UserViewModel;
 
 import java.util.ArrayList;
 
@@ -23,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
 
     private UserViewModel userViewModel;
     private RestaurantViewModal restaurantViewModal;
+
+    private BookingViewModel bookingViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,12 +68,15 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = navHostFragment.getNavController();
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         restaurantViewModal = new ViewModelProvider(this).get(RestaurantViewModal.class);
+        bookingViewModel = new ViewModelProvider(this).get(BookingViewModel.class);
         new Thread(() -> {
             DBHelper.getInstance(getApplicationContext()).getUserDao().deleteAll();
             DBHelper.getInstance(getApplicationContext()).getRestaurantDao().deleteAll();
             DBHelper.getInstance(getApplicationContext()).getBookingDao().deleteAll();
-            userViewModel.setUserAnotherThread(null);
+            userViewModel.setUser(null);
             restaurantViewModal.setRestaurantList(new ArrayList<>());
+            restaurantViewModal.setRestaurant(null);
+            bookingViewModel.setBookingList(new ArrayList<>());
             binding.fragmentContainerView.post(() -> {
                 Toast.makeText(getApplicationContext(), "Logout Effettuato con successo", Toast.LENGTH_SHORT).show();
                 navController.navigate(R.id.loginFragment);

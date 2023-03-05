@@ -1,8 +1,6 @@
 package com.example.where2eat;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,14 +9,13 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.where2eat.databinding.AdapterRestaurantCardBinding;
-import com.example.where2eat.domain.modal.Restaurant;
+import com.example.where2eat.domain.model.Restaurant;
 import com.example.where2eat.tools.VolleyRequests;
+import com.example.where2eat.domain.viewmodel.RestaurantViewModal;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterRestaurantCard extends RecyclerView.Adapter<AdapterRestaurantCard.ViewHolder> {
@@ -76,6 +73,8 @@ public class AdapterRestaurantCard extends RecyclerView.Adapter<AdapterRestauran
 
             Restaurant restaurant = restaurantList.get(position);
             binding.setRestaurant(restaurant);
+            binding.imageView.setDefaultImageResId(R.drawable.image_downloading_96);
+            binding.imageView.setErrorImageResId(R.drawable.image_error_48);
             binding.imageView.setImageUrl(restaurant.getImmagine(), VolleyRequests.getInstance(binding.imageView.getContext()).getImageLoader());
         }
     }

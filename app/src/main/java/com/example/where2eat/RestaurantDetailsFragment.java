@@ -14,6 +14,7 @@ import androidx.navigation.Navigation;
 
 import com.example.where2eat.databinding.FragmentRestaurantDetailsBinding;
 import com.example.where2eat.tools.VolleyRequests;
+import com.example.where2eat.domain.viewmodel.RestaurantViewModal;
 
 public class RestaurantDetailsFragment extends Fragment {
 
@@ -43,7 +44,8 @@ public class RestaurantDetailsFragment extends Fragment {
         super.onResume();
         restaurantViewModal.getRestaurant().observe(getViewLifecycleOwner(), rest -> {
             binding.setRestaurant(rest);
-
+            binding.imageRestaurantDetails.setDefaultImageResId(R.drawable.image_downloading_96);
+            binding.imageRestaurantDetails.setErrorImageResId(R.drawable.image_error_48);
             binding.imageRestaurantDetails.setImageUrl(rest.getImmagine(), VolleyRequests.getInstance(binding.imageRestaurantDetails.getContext()).getImageLoader());
             binding.bottonePrenotaRestaurantDetails.setOnClickListener(v -> {
                 navController.navigate(R.id.createBookingFragment);

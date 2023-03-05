@@ -1,4 +1,4 @@
-package com.example.where2eat.domain.modal;
+package com.example.where2eat.domain.model;
 
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -1,12 +1,8 @@
-package com.example.where2eat.domain.modal;
-
-import static android.provider.Settings.Global.getString;
+package com.example.where2eat.domain.model;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
-import com.example.where2eat.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -86,6 +82,7 @@ public class Restaurant implements Serializable {
         restaurant.setRagioneSociale(json.optString("ragioneSociale"));
         restaurant.setIndirizzo(json.optString("indirizzo"));
         restaurant.setLocalita(json.optString("localita"));
+        restaurant.setTelefonoAziendale(json.optString("telefonoAziendale"));
         restaurant.setLongitudine(json.optString("longitudine"));
         restaurant.setLatitudine(json.optString("latitudine"));
         restaurant.setPrezzoMedioDichiarato(json.optInt("prezzoMedioDichiarato"));

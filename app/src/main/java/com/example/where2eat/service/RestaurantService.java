@@ -1,7 +1,9 @@
 package com.example.where2eat.service;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 
 import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -9,12 +11,14 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.example.where2eat.domain.modal.Restaurant;
+import com.example.where2eat.domain.model.Restaurant;
 import com.example.where2eat.roomdatabase.DBHelper;
+import com.example.where2eat.service.utility.Requests;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -27,6 +31,7 @@ public class RestaurantService extends IntentService {
 
     public static final String DOWNLOAD_RESTAURANTS_COMPLETED = "download_restaurants_completed";
     public static final String DOWNLOAD_RESTAURANTS_ERROR = "download_restaurants_error";
+    public static final String INTERNET_RESTAURANTS_ERROR = "internet_restaurants_error";
 
     public RestaurantService() {
         super(RestaurantService.class.getSimpleName());
@@ -34,13 +39,19 @@ public class RestaurantService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        System.out.println("onHandleIntentPrima");
-        int action = Objects.requireNonNull(intent).getIntExtra(KEY_DOWNLOAD_RESTAURANTS, -1);
+        if (isNetworkConnected()) {
+            int action = Objects.requireNonNull(intent).getIntExtra(KEY_DOWNLOAD_RESTAURANTS, -1);
 
-        if (action == DOWNLOAD_RESTAURANTS) {
-            System.out.println("onHandleIntent");
-            restaurantsDownloadData();
-        }// Nothing
+            if (action == DOWNLOAD_RESTAURANTS) {
+                System.out.println("onHandleIntent");
+                restaurantsDownloadData();
+            }// Nothing
+        } else {
+            System.out.println("errore internet restaurants");
+            Intent intentError = new Intent(INTERNET_RESTAURANTS_ERROR);
+            LocalBroadcastManager.getInstance(getApplicationContext())
+                    .sendBroadcast(intentError);
+        }
     }
 
     private void restaurantsDownloadData() {
@@ -83,5 +94,22 @@ public class RestaurantService extends IntentService {
             }
         });
         request.getQueue().add(downloadRequest);
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean isConnected = cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+        if (isConnected) {
+            try {
+                InetAddress ipAddr = InetAddress.getByName("www.google.com");
+                //You can replace it with your name
+                return !ipAddr.toString().equals("");
+            } catch (Exception e) {
+                System.out.println("eccezione");
+                return false;
+            }
+        }
+        return false;
     }
 }

@@ -1,4 +1,4 @@
-package com.example.where2eat;
+package com.example.where2eat.domain.viewmodel;
 
 import android.app.Application;
 import android.os.Looper;
@@ -8,8 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.where2eat.domain.modal.Booking;
-import com.example.where2eat.domain.modal.Restaurant;
+import com.example.where2eat.domain.model.Booking;
 import com.example.where2eat.roomdatabase.DBHelper;
 
 import java.util.ArrayList;

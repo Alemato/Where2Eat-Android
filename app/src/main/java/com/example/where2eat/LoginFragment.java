@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.text.method.KeyListener;
 import android.view.LayoutInflater;
@@ -22,15 +23,19 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.where2eat.databinding.FragmentLoginBinding;
-import com.example.where2eat.domain.modal.Booking;
-import com.example.where2eat.domain.modal.Restaurant;
-import com.example.where2eat.domain.modal.User;
-import com.example.where2eat.domain.modal.UserNamePassword;
+import com.example.where2eat.domain.model.Booking;
+import com.example.where2eat.domain.model.Restaurant;
+import com.example.where2eat.domain.model.User;
+import com.example.where2eat.domain.model.UserNamePassword;
 import com.example.where2eat.roomdatabase.DBHelper;
 import com.example.where2eat.service.AuthService;
 import com.example.where2eat.service.BookingService;
 import com.example.where2eat.service.RestaurantService;
+import com.example.where2eat.domain.viewmodel.BookingViewModel;
+import com.example.where2eat.domain.viewmodel.RestaurantViewModal;
+import com.example.where2eat.domain.viewmodel.UserViewModel;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -40,7 +45,7 @@ public class LoginFragment extends Fragment {
 
     FragmentLoginBinding binding = null;
     private boolean isProgressVisible = false;
-    private UserViewModel viewModel;
+    private UserViewModel userViewModel;
     private RestaurantViewModal restaurantViewModal;
     private BookingViewModel bookingViewModel;
 
@@ -57,7 +62,7 @@ public class LoginFragment extends Fragment {
                         new Thread(() -> {
                             User user = DBHelper.getInstance(requireContext()).getUserDao().getUser();
                             if (user != null && !Objects.equals(user, new User())) {
-                                viewModel.setUserAnotherThread(user);
+                                userViewModel.setUser(user);
                             }
                             downloadRestauransts();
                         }).start();
@@ -65,6 +70,13 @@ public class LoginFragment extends Fragment {
                     case AuthService.LOGIN_ERROR:
                         unlockLogin(pwd, usr);
                         Toast.makeText(requireContext(), "Errore di Autenticazione", Toast.LENGTH_SHORT).show();
+                        return;
+                    case AuthService.INTERNET_LOGIN_ERROR:
+                    case BookingService.INTERNET_BOOKING_ERROR:
+                    case RestaurantService.INTERNET_RESTAURANTS_ERROR:
+                        unlockLogin(pwd, usr);
+                        logout();
+                        Toast.makeText(requireContext(), "Errore, Non sei connesso ad internet!", Toast.LENGTH_SHORT).show();
                         return;
                     case RestaurantService.DOWNLOAD_RESTAURANTS_COMPLETED:
                         new Thread(() -> {
@@ -78,8 +90,7 @@ public class LoginFragment extends Fragment {
                     case RestaurantService.DOWNLOAD_RESTAURANTS_ERROR:
                         unlockLogin(pwd, usr);
                         Toast.makeText(requireContext(), "Errore nella ripresa dei ristoranti", Toast.LENGTH_SHORT).show();
-                        requireActivity().finish();
-                        //TODO Reset all invece di finish()
+                        logout();
                         return;
                     case BookingService.DOWNLOAD_BOOKINGS_SUCCESSFUL:
                         new Thread(() -> {
@@ -97,10 +108,8 @@ public class LoginFragment extends Fragment {
                     case BookingService.DOWNLOAD_BOOKINGS_ERROR:
                         unlockLogin(pwd, usr);
                         Toast.makeText(requireContext(), "Errore nella ripresa delle Prenotazioni", Toast.LENGTH_SHORT).show();
-                        //requireActivity().finish();
-                        //TODO Reset all invece di finish()
+                        logout();
                         return;
-
                 }
             }
         }
@@ -119,22 +128,56 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+        userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
         restaurantViewModal = new ViewModelProvider(requireActivity()).get(RestaurantViewModal.class);
         bookingViewModel = new ViewModelProvider(requireActivity()).get(BookingViewModel.class);
         binding.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isProgressVisible) {
-                    unlockLogin(pwd, usr);
+                /*
+                new Thread(() -> {
+                    if (isNetworkConnected()) {
+                        binding.textUserNameLogin.post(() -> {
+                            if (!binding.textUserNameLogin.getText().toString().equals("") && !binding.textPasswordLogin.getText().toString().equals("")) {
+                                if (isProgressVisible) {
+                                    unlockLogin(pwd, usr);
+                                } else {
+                                    UserNamePassword userNamePassword = new UserNamePassword(binding.textUserNameLogin.getText().toString(), binding.textPasswordLogin.getText().toString());
+                                    Intent intent = new Intent(requireContext(), AuthService.class);
+                                    intent.putExtra(AuthService.KEY_ACTION, AuthService.ACTION_LOGIN);
+                                    intent.putExtra(AuthService.KEY_USER_PASSWORD, userNamePassword);
+                                    requireActivity().startService(intent);
+                                    blockLogin();
+                                }
+                            } else {
+
+                                Toast.makeText(requireContext(), "Riempi i campi prima di effettaure la login!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else {
+                        binding.textUserNameLogin.post(() -> {
+                            Toast.makeText(requireContext(), "Non sei connesso ad internet!", Toast.LENGTH_SHORT).show();
+                        });
+                    }
+                }).start();
+                */
+
+
+                if (!binding.textUserNameLogin.getText().toString().equals("") && !binding.textPasswordLogin.getText().toString().equals("")) {
+                    if (isProgressVisible) {
+                        unlockLogin(pwd, usr);
+                    } else {
+                        UserNamePassword userNamePassword = new UserNamePassword(binding.textUserNameLogin.getText().toString(), binding.textPasswordLogin.getText().toString());
+                        Intent intent = new Intent(requireContext(), AuthService.class);
+                        intent.putExtra(AuthService.KEY_ACTION, AuthService.ACTION_LOGIN);
+                        intent.putExtra(AuthService.KEY_USER_PASSWORD, userNamePassword);
+                        requireActivity().startService(intent);
+                        blockLogin();
+                    }
                 } else {
-                    UserNamePassword userNamePassword = new UserNamePassword(binding.textUserNameLogin.getText().toString(), binding.textPasswordLogin.getText().toString());
-                    Intent intent = new Intent(requireContext(), AuthService.class);
-                    intent.putExtra(AuthService.KEY_ACTION, AuthService.ACTION_LOGIN);
-                    intent.putExtra(AuthService.KEY_USER_PASSWORD, userNamePassword);
-                    requireActivity().startService(intent);
-                    blockLogin();
+                    Toast.makeText(requireContext(), "Riempi i campi prima di effettaure la login!", Toast.LENGTH_SHORT).show();
                 }
+
             }
         });
     }
@@ -188,6 +231,9 @@ public class LoginFragment extends Fragment {
         filter.addAction(RestaurantService.DOWNLOAD_RESTAURANTS_ERROR);
         filter.addAction(BookingService.DOWNLOAD_BOOKINGS_SUCCESSFUL);
         filter.addAction(BookingService.DOWNLOAD_BOOKINGS_ERROR);
+        filter.addAction(AuthService.INTERNET_LOGIN_ERROR);
+        filter.addAction(RestaurantService.INTERNET_RESTAURANTS_ERROR);
+        filter.addAction(BookingService.INTERNET_BOOKING_ERROR);
         LocalBroadcastManager.getInstance(requireContext())
                 .registerReceiver(receiver, filter);
     }
@@ -216,5 +262,35 @@ public class LoginFragment extends Fragment {
         Intent intent = new Intent(requireContext(), BookingService.class);
         intent.putExtra(BookingService.KEY_BOOKING_ACTION, BookingService.ACTION_DOWNLOAD_BOOKINGS);
         requireActivity().startService(intent);
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm =
+                (ConnectivityManager) requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean isConnected = cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+        System.out.println(isConnected);
+        if (isConnected) {
+            try {
+                InetAddress ipAddr = InetAddress.getByName("www.google.com");
+                //You can replace it with your name
+                return !ipAddr.toString().equals("");
+            } catch (Exception e) {
+                System.out.println("eccezione");
+                return false;
+            }
+        }
+        return false;
+    }
+
+    private void logout() {
+        new Thread(() -> {
+            DBHelper.getInstance(requireContext()).getUserDao().deleteAll();
+            DBHelper.getInstance(requireContext()).getRestaurantDao().deleteAll();
+            DBHelper.getInstance(requireContext()).getBookingDao().deleteAll();
+            userViewModel.setUser(null);
+            restaurantViewModal.setRestaurantList(new ArrayList<>());
+            restaurantViewModal.setRestaurant(null);
+            bookingViewModel.setBookingList(new ArrayList<>());
+        }).start();
     }
 }

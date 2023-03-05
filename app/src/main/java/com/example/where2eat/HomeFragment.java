@@ -8,16 +8,17 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.where2eat.databinding.FragmentHomeBinding;
-import com.example.where2eat.domain.modal.Restaurant;
-import com.example.where2eat.domain.modal.User;
+import com.example.where2eat.domain.model.Restaurant;
+import com.example.where2eat.domain.model.User;
 import com.example.where2eat.roomdatabase.DBHelper;
+import com.example.where2eat.domain.viewmodel.RestaurantViewModal;
+import com.example.where2eat.domain.viewmodel.UserViewModel;
 
 import java.util.ArrayList;
 import java.util.List;

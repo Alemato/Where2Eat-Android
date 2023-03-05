@@ -6,7 +6,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.example.where2eat.domain.modal.Booking;
+import com.example.where2eat.domain.model.Booking;
 
 import java.util.List;
 

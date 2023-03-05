@@ -7,7 +7,7 @@
 
         <variable
             name="restaurant"
-            type="com.example.where2eat.domain.modal.Restaurant" />
+            type="com.example.where2eat.domain.model.Restaurant" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -48,7 +48,7 @@
                 <com.android.volley.toolbox.NetworkImageView
                     android:id="@+id/imageRestaurantDetails"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="240dp"
                     tools:srcCompat="@tools:sample/avatars" />
 
                 <TextView
@@ -76,7 +76,7 @@
                             android:layout_marginTop="15dp"
                             android:layout_marginEnd="16dp"
                             android:text="@string/localit"
-                            android:textSize="11sp" />
+                            android:textSize="13sp" />
 
                         <TextView
                             android:id="@+id/textLocalitaRestaurantDetails"
@@ -98,7 +98,7 @@
                             android:layout_marginTop="15dp"
                             android:layout_marginEnd="16dp"
                             android:text="@string/indirizzo"
-                            android:textSize="11sp" />
+                            android:textSize="13sp" />
 
                         <TextView
                             android:id="@+id/textIndirizzoRestaurantDetails"
@@ -120,7 +120,7 @@
                             android:layout_marginTop="15dp"
                             android:layout_marginEnd="16dp"
                             android:text="@string/tipidicucina"
-                            android:textSize="11sp"
+                            android:textSize="13sp"
                             tools:ignore="HardcodedText" />
 
                         <TextView
@@ -143,7 +143,7 @@
                             android:layout_marginTop="15dp"
                             android:layout_marginEnd="16dp"
                             android:text="@string/posti"
-                            android:textSize="11sp" />
+                            android:textSize="13sp" />
 
                         <TextView
                             android:id="@+id/textView3"
@@ -165,7 +165,7 @@
                             android:layout_marginTop="15dp"
                             android:layout_marginEnd="16dp"
                             android:text="@string/email"
-                            android:textSize="11sp" />
+                            android:textSize="13sp" />
 
                         <TextView
                             android:id="@+id/textView4"
@@ -188,7 +188,7 @@
                             android:layout_marginTop="15dp"
                             android:layout_marginEnd="16dp"
                             android:text="@string/telefono"
-                            android:textSize="11sp" />
+                            android:textSize="13sp" />
 
                         <TextView
                             android:id="@+id/textView5"
@@ -211,7 +211,7 @@
                             android:layout_marginTop="15dp"
                             android:layout_marginEnd="16dp"
                             android:text="@string/pagamento"
-                            android:textSize="11sp" />
+                            android:textSize="13sp" />
 
                         <TextView
                             android:id="@+id/textView18"
@@ -235,7 +235,7 @@
                             android:layout_marginTop="15dp"
                             android:layout_marginEnd="16dp"
                             android:text="@string/voto"
-                            android:textSize="11sp" />
+                            android:textSize="13sp" />
 
                         <TextView
                             android:id="@+id/textView19"
@@ -259,7 +259,7 @@
                             android:layout_marginTop="15dp"
                             android:layout_marginEnd="16dp"
                             android:text="@string/descrizione"
-                            android:textSize="11sp" />
+                            android:textSize="13sp" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -282,7 +282,7 @@
                             android:layout_marginTop="15dp"
                             android:layout_marginEnd="16dp"
                             android:text="@string/servizi"
-                            android:textSize="11sp"
+                            android:textSize="13sp"
                             tools:ignore="HardcodedText" />
 
                         <TextView

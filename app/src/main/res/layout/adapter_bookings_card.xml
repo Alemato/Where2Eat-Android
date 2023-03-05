@@ -7,7 +7,7 @@
 
         <variable
             name="booking"
-            type="com.example.where2eat.domain.modal.Booking" />
+            type="com.example.where2eat.domain.model.Booking" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
