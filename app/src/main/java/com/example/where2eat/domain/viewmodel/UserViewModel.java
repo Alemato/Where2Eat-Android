@@ -33,16 +33,6 @@ public class UserViewModel extends AndroidViewModel {
         return user;
     }
 
-    public void setUserMainThread(User user) {
-        // MainThread
-        this.user.setValue(user);
-    }
-
-    public void setUserAnotherThread(User user) {
-        // Another Thread
-        this.user.postValue(user);
-    }
-
     public void setUser(User user){
         if (Looper.getMainLooper().getThread() == Thread.currentThread()) {
             // MainThread

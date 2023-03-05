@@ -40,7 +40,7 @@ public class User implements Serializable {
         this.token = token;
     }
 
-    public static User parseJson(JSONObject json){
+    public static User parseJson(JSONObject json) {
         User user = new User();
         user.setId(json.optLong("id"));
         user.setNome(json.optString("nome"));

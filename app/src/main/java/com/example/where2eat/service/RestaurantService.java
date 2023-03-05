@@ -41,13 +41,10 @@ public class RestaurantService extends IntentService {
     protected void onHandleIntent(@Nullable Intent intent) {
         if (isNetworkConnected()) {
             int action = Objects.requireNonNull(intent).getIntExtra(KEY_DOWNLOAD_RESTAURANTS, -1);
-
             if (action == DOWNLOAD_RESTAURANTS) {
-                System.out.println("onHandleIntent");
                 restaurantsDownloadData();
             }// Nothing
         } else {
-            System.out.println("errore internet restaurants");
             Intent intentError = new Intent(INTERNET_RESTAURANTS_ERROR);
             LocalBroadcastManager.getInstance(getApplicationContext())
                     .sendBroadcast(intentError);
@@ -59,14 +56,10 @@ public class RestaurantService extends IntentService {
         JsonArrayRequest downloadRequest = new JsonArrayRequest("http://192.168.0.160:8080/api/ristoranti", new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                System.out.println("@@@@@@@@@@@@@@@@");
-                System.out.println(response);
                 List<Restaurant> restaurantList = new ArrayList<>();
                 for (int i = 0; i < response.length(); i++) {
                     JSONObject item = response.optJSONObject(i);
                     if (item == null) continue;
-                    System.out.println("item");
-                    System.out.println(item);
                     restaurantList.add(Restaurant.parseJson(item));
                 }
 
@@ -103,10 +96,8 @@ public class RestaurantService extends IntentService {
         if (isConnected) {
             try {
                 InetAddress ipAddr = InetAddress.getByName("www.google.com");
-                //You can replace it with your name
                 return !ipAddr.toString().equals("");
             } catch (Exception e) {
-                System.out.println("eccezione");
                 return false;
             }
         }

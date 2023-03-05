@@ -54,23 +54,6 @@ public class Booking {
         this.indirizzo = indirizzo;
         this.immagine = immagine;
     }
-    /*
-     {
-        "id": 1,
-        "data": "19/01/2023",
-        "ora": "15:00",
-        "statoPrenotazione": 3,
-        "numeroPosti": 8,
-        "idCliente": 5,
-        "ristorante": {
-            "id": 2,
-            "ragioneSociale": "Ristorante La fenice",
-            "indirizzo": "via roma 1",
-            "localita": "L'Aquila",
-            }
-            }
-     */
-
     public static Booking parseJson(JSONObject json) {
         Booking booking = new Booking();
         booking.setId(json.optLong("id"));
@@ -101,8 +84,6 @@ public class Booking {
 
             JSONArray immagini = rist.optJSONArray("immagini");
             if (immagini != null && immagini.length() > 0) {
-                //restaurant.setImmagine(restaurant.getId() + "/immagine-copertina");
-
                 String url = "http://192.168.0.160:8080/api/uploads/" + immagini.getJSONObject(0).optString("path");
                 booking.setImmagine(url);
 

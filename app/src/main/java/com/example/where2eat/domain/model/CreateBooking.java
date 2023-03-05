@@ -6,15 +6,6 @@ import org.json.JSONObject;
 import java.io.Serializable;
 
 public class CreateBooking implements Serializable {
-   /*
-    {
-        "id": 7,
-            "data": "27/03/2023",
-            "ora": "20:00",
-            "numeroPosti": 2
-    }
-    */
-
     private Long idRistorante;
     private String dataPrenotazione;
     private String oraPrenotazione;

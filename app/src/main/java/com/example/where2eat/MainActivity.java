@@ -13,9 +13,9 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.where2eat.databinding.ActivityMainBinding;
 import com.example.where2eat.domain.viewmodel.BookingViewModel;
-import com.example.where2eat.roomdatabase.DBHelper;
 import com.example.where2eat.domain.viewmodel.RestaurantViewModal;
 import com.example.where2eat.domain.viewmodel.UserViewModel;
+import com.example.where2eat.roomdatabase.DBHelper;
 
 import java.util.ArrayList;
 

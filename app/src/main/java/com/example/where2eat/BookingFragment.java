@@ -36,9 +36,7 @@ public class BookingFragment extends Fragment {
         binding.recyclerViewBookings.setLayoutManager(new LinearLayoutManager(requireContext()));
         adapterBookingCard = new AdapterBookingCard(requireContext(), bookingList);
         binding.recyclerViewBookings.setAdapter(adapterBookingCard);
-
         bookingViewModel = new ViewModelProvider(requireActivity()).get(BookingViewModel.class);
-
         return binding.getRoot();
     }
 

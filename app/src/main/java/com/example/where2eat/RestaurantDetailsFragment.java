@@ -13,8 +13,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.where2eat.databinding.FragmentRestaurantDetailsBinding;
-import com.example.where2eat.tools.VolleyRequests;
 import com.example.where2eat.domain.viewmodel.RestaurantViewModal;
+import com.example.where2eat.tools.VolleyRequests;
 
 public class RestaurantDetailsFragment extends Fragment {
 

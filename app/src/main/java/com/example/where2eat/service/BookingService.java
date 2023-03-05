@@ -54,17 +54,15 @@ public class BookingService extends IntentService {
             if (isNetworkConnected()) {
                 downloadAllPrenotazioni();
             } else {
-                System.out.println("errore internet booking");
                 Intent intentError = new Intent(INTERNET_BOOKING_ERROR);
                 LocalBroadcastManager.getInstance(getApplicationContext())
                         .sendBroadcast(intentError);
             }
         } else if (action == ACTION_BOOKING_CREATE) {
-            if(isNetworkConnected()) {
+            if (isNetworkConnected()) {
                 CreateBooking createBooking = (CreateBooking) intent.getSerializableExtra(KEY_CREATE_BOOKING_OBJ);
                 if (createBooking != null) createBookingServer(createBooking);
             } else {
-                System.out.println("errore internet craete booking");
                 Intent intentError = new Intent(INTERNET_CREATE_BOOKING_ERROR);
                 LocalBroadcastManager.getInstance(getApplicationContext())
                         .sendBroadcast(intentError);
@@ -85,16 +83,12 @@ public class BookingService extends IntentService {
         JsonArrayRequest downloadRequest = new JsonArrayRequest("http://192.168.0.160:8080/api/prenotazioni", new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                System.out.println(response);
                 List<Booking> bookingList = new ArrayList<>();
                 for (int i = 0; i < response.length(); i++) {
                     JSONObject item = response.optJSONObject(i);
                     if (item == null) continue;
-                    System.out.println("item");
-                    System.out.println(item);
                     bookingList.add(Booking.parseJson(item));
                 }
-                System.out.println(bookingList);
                 new Thread(() -> {
                     DBHelper.getInstance(getApplicationContext()).getBookingDao().deleteAll();
                     DBHelper.getInstance(getApplicationContext()).getBookingDao().save(bookingList);
@@ -171,10 +165,8 @@ public class BookingService extends IntentService {
         if (isConnected) {
             try {
                 InetAddress ipAddr = InetAddress.getByName("www.google.com");
-                //You can replace it with your name
                 return !ipAddr.toString().equals("");
             } catch (Exception e) {
-                System.out.println("eccezione");
                 return false;
             }
         }

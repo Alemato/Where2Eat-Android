@@ -4,9 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.text.method.KeyListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,15 +25,14 @@ import com.example.where2eat.domain.model.Booking;
 import com.example.where2eat.domain.model.Restaurant;
 import com.example.where2eat.domain.model.User;
 import com.example.where2eat.domain.model.UserNamePassword;
+import com.example.where2eat.domain.viewmodel.BookingViewModel;
+import com.example.where2eat.domain.viewmodel.RestaurantViewModal;
+import com.example.where2eat.domain.viewmodel.UserViewModel;
 import com.example.where2eat.roomdatabase.DBHelper;
 import com.example.where2eat.service.AuthService;
 import com.example.where2eat.service.BookingService;
 import com.example.where2eat.service.RestaurantService;
-import com.example.where2eat.domain.viewmodel.BookingViewModel;
-import com.example.where2eat.domain.viewmodel.RestaurantViewModal;
-import com.example.where2eat.domain.viewmodel.UserViewModel;
 
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -48,9 +45,6 @@ public class LoginFragment extends Fragment {
     private UserViewModel userViewModel;
     private RestaurantViewModal restaurantViewModal;
     private BookingViewModel bookingViewModel;
-
-    private KeyListener pwd;
-    private KeyListener usr;
 
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
@@ -68,13 +62,13 @@ public class LoginFragment extends Fragment {
                         }).start();
                         return;
                     case AuthService.LOGIN_ERROR:
-                        unlockLogin(pwd, usr);
+                        unlockLogin();
                         Toast.makeText(requireContext(), "Errore di Autenticazione", Toast.LENGTH_SHORT).show();
                         return;
                     case AuthService.INTERNET_LOGIN_ERROR:
                     case BookingService.INTERNET_BOOKING_ERROR:
                     case RestaurantService.INTERNET_RESTAURANTS_ERROR:
-                        unlockLogin(pwd, usr);
+                        unlockLogin();
                         logout();
                         Toast.makeText(requireContext(), "Errore, Non sei connesso ad internet!", Toast.LENGTH_SHORT).show();
                         return;
@@ -88,7 +82,7 @@ public class LoginFragment extends Fragment {
                         }).start();
                         return;
                     case RestaurantService.DOWNLOAD_RESTAURANTS_ERROR:
-                        unlockLogin(pwd, usr);
+                        unlockLogin();
                         Toast.makeText(requireContext(), "Errore nella ripresa dei ristoranti", Toast.LENGTH_SHORT).show();
                         logout();
                         return;
@@ -99,14 +93,14 @@ public class LoginFragment extends Fragment {
                                 bookingViewModel.setBookingList(bookingList);
                             }
                             binding.textUserNameLogin.post(() -> {
-                                unlockLogin(pwd, usr);
+                                unlockLogin();
                                 final NavController navController = Navigation.findNavController(requireView());
                                 navController.navigate(R.id.homeFragment);
                             });
                         }).start();
                         return;
                     case BookingService.DOWNLOAD_BOOKINGS_ERROR:
-                        unlockLogin(pwd, usr);
+                        unlockLogin();
                         Toast.makeText(requireContext(), "Errore nella ripresa delle Prenotazioni", Toast.LENGTH_SHORT).show();
                         logout();
                         return;
@@ -120,8 +114,6 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentLoginBinding.inflate(inflater, container, false);
-        pwd = binding.textPasswordLogin.getKeyListener();
-        usr = binding.textUserNameLogin.getKeyListener();
         return binding.getRoot();
     }
 
@@ -134,38 +126,9 @@ public class LoginFragment extends Fragment {
         binding.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                new Thread(() -> {
-                    if (isNetworkConnected()) {
-                        binding.textUserNameLogin.post(() -> {
-                            if (!binding.textUserNameLogin.getText().toString().equals("") && !binding.textPasswordLogin.getText().toString().equals("")) {
-                                if (isProgressVisible) {
-                                    unlockLogin(pwd, usr);
-                                } else {
-                                    UserNamePassword userNamePassword = new UserNamePassword(binding.textUserNameLogin.getText().toString(), binding.textPasswordLogin.getText().toString());
-                                    Intent intent = new Intent(requireContext(), AuthService.class);
-                                    intent.putExtra(AuthService.KEY_ACTION, AuthService.ACTION_LOGIN);
-                                    intent.putExtra(AuthService.KEY_USER_PASSWORD, userNamePassword);
-                                    requireActivity().startService(intent);
-                                    blockLogin();
-                                }
-                            } else {
-
-                                Toast.makeText(requireContext(), "Riempi i campi prima di effettaure la login!", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    } else {
-                        binding.textUserNameLogin.post(() -> {
-                            Toast.makeText(requireContext(), "Non sei connesso ad internet!", Toast.LENGTH_SHORT).show();
-                        });
-                    }
-                }).start();
-                */
-
-
                 if (!binding.textUserNameLogin.getText().toString().equals("") && !binding.textPasswordLogin.getText().toString().equals("")) {
                     if (isProgressVisible) {
-                        unlockLogin(pwd, usr);
+                        unlockLogin();
                     } else {
                         UserNamePassword userNamePassword = new UserNamePassword(binding.textUserNameLogin.getText().toString(), binding.textPasswordLogin.getText().toString());
                         Intent intent = new Intent(requireContext(), AuthService.class);
@@ -197,26 +160,14 @@ public class LoginFragment extends Fragment {
     private void blockLogin() {
         isProgressVisible = true;
         binding.progressBarLogin.setVisibility(View.VISIBLE);
-        // binding.textPasswordLogin.setFocusable(false);
         binding.textPasswordLogin.setEnabled(false);
-        /* binding.textPasswordLogin.setCursorVisible(false);
-           binding.textPasswordLogin.setKeyListener(null);
-           binding.textUserNameLogin.setFocusable(false); */
         binding.textUserNameLogin.setEnabled(false);
-        /* binding.textUserNameLogin.setCursorVisible(false);
-           binding.textUserNameLogin.setKeyListener(null); */
     }
 
-    private void unlockLogin(KeyListener pwd, KeyListener usr) {
+    private void unlockLogin() {
         binding.progressBarLogin.setVisibility(View.GONE);
-        //binding.textPasswordLogin.setFocusable(true);
         binding.textPasswordLogin.setEnabled(true);
-        //binding.textPasswordLogin.setCursorVisible(true);
-        //binding.textPasswordLogin.setKeyListener(pwd);
-        //binding.textUserNameLogin.setFocusable(true);
         binding.textUserNameLogin.setEnabled(true);
-        //binding.textUserNameLogin.setCursorVisible(true);
-        //binding.textUserNameLogin.setKeyListener(usr);
         isProgressVisible = false;
     }
 
@@ -262,24 +213,6 @@ public class LoginFragment extends Fragment {
         Intent intent = new Intent(requireContext(), BookingService.class);
         intent.putExtra(BookingService.KEY_BOOKING_ACTION, BookingService.ACTION_DOWNLOAD_BOOKINGS);
         requireActivity().startService(intent);
-    }
-
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm =
-                (ConnectivityManager) requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        boolean isConnected = cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
-        System.out.println(isConnected);
-        if (isConnected) {
-            try {
-                InetAddress ipAddr = InetAddress.getByName("www.google.com");
-                //You can replace it with your name
-                return !ipAddr.toString().equals("");
-            } catch (Exception e) {
-                System.out.println("eccezione");
-                return false;
-            }
-        }
-        return false;
     }
 
     private void logout() {

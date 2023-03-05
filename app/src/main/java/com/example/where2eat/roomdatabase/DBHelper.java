@@ -30,6 +30,4 @@ public abstract class DBHelper extends RoomDatabase {
         }
         return instance;
     }
-
-    // protected DBHelper() {}
 }

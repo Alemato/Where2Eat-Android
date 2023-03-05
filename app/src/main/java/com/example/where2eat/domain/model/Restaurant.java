@@ -95,7 +95,6 @@ public class Restaurant implements Serializable {
         // Immagine
         JSONArray immagini = json.optJSONArray("immagini");
         if (immagini != null && immagini.length() > 0) {
-            //restaurant.setImmagine(restaurant.getId() + "/immagine-copertina");
             try {
                 String url = "http://192.168.0.160:8080/api/uploads/" + immagini.getJSONObject(0).optString("path");
                 restaurant.setImmagine(url);

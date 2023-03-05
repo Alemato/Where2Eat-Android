@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.where2eat.databinding.AdapterRestaurantCardBinding;
 import com.example.where2eat.domain.model.Restaurant;
-import com.example.where2eat.tools.VolleyRequests;
 import com.example.where2eat.domain.viewmodel.RestaurantViewModal;
+import com.example.where2eat.tools.VolleyRequests;
 
 import java.util.List;
 

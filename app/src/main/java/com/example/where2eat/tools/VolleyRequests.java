@@ -11,8 +11,6 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
 public class VolleyRequests {
-
-    private RequestQueue queue;
     private RequestQueue imageQueue;
     private ImageLoader imageLoader;
 
@@ -28,7 +26,6 @@ public class VolleyRequests {
     }
 
     private VolleyRequests(Context context) {
-        queue = Volley.newRequestQueue(context);
         imageQueue = Volley.newRequestQueue(context);
         imageLoader = new ImageLoader(imageQueue, new ImageLoader.ImageCache() {
 

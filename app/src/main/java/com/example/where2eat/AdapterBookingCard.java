@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.where2eat.databinding.AdapterBookingsCardBinding;
 import com.example.where2eat.domain.model.Booking;
 import com.example.where2eat.domain.model.Restaurant;
-import com.example.where2eat.roomdatabase.DBHelper;
 import com.example.where2eat.domain.viewmodel.RestaurantViewModal;
+import com.example.where2eat.roomdatabase.DBHelper;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -41,7 +41,7 @@ public class AuthService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        if(isNetworkConnected()) {
+        if (isNetworkConnected()) {
             int action = Objects.requireNonNull(intent).getIntExtra(KEY_ACTION, -1);
             if (action == ACTION_LOGIN) {
                 UserNamePassword userNamePassword = (UserNamePassword) intent.getSerializableExtra(KEY_USER_PASSWORD);
@@ -55,6 +55,7 @@ public class AuthService extends IntentService {
         }
         // Nothing
     }
+
     private void loginDownloadData(UserNamePassword userNamePassword) {
         Requests request = new Requests(getApplicationContext());
         try {
@@ -77,9 +78,6 @@ public class AuthService extends IntentService {
                     if (item != null) user = User.parseJson(item);
                     if (headers != null)
                         user.setToken("Bearer " + headers.optString("access_token"));
-                    System.out.println(user);
-
-
 
                     User finalUser = user;
                     new Thread(() -> {
@@ -118,7 +116,6 @@ public class AuthService extends IntentService {
                 InetAddress ipAddr = InetAddress.getByName("www.google.com");
                 return !ipAddr.toString().equals("");
             } catch (Exception e) {
-                System.out.println("eccezione");
                 return false;
             }
         }

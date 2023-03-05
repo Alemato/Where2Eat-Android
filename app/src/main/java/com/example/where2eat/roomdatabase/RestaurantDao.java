@@ -30,16 +30,4 @@ public abstract class RestaurantDao {
 
     @Query("DELETE FROM restaurants")
     public abstract void deleteAll();
-
-/*
-    @Query("SELECT id FROM restaurants ORDER BY id DESC LIMIT 1")
-    public abstract long findLastId();
-
-    @Transaction
-    public void complexSave(Restaurant restaurant) {
-        save(restaurant);
-        long id = findLastId();
-        restaurant.setId(id);
-    }
-    */
 }
