@@ -110,7 +110,9 @@ public class RistorantiMapFragment extends Fragment implements OnMapReadyCallbac
                 options.position(new LatLng(location.getLatitude(), location.getLongitude()));
                 options.title("Sono qui");
                 marker = map.addMarker(options);
-                marker.showInfoWindow();
+                if (marker != null) {
+                    marker.showInfoWindow();
+                }
             } else {
                 marker.setPosition(new LatLng(location.getLatitude(), location.getLongitude()));
             }
