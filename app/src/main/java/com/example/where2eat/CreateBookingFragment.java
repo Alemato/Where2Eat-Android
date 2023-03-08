@@ -130,7 +130,9 @@ public class CreateBookingFragment extends Fragment {
         binding.textDateCreateBooking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new DatePickerDialog(getContext(), date, dateCalendar.get(Calendar.YEAR), dateCalendar.get(Calendar.MONTH), dateCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), date, dateCalendar.get(Calendar.YEAR), dateCalendar.get(Calendar.MONTH), dateCalendar.get(Calendar.DAY_OF_MONTH));
+                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+                datePickerDialog.show();
             }
         });
 
