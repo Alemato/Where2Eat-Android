@@ -64,7 +64,7 @@ public class AdapterRestaurantCard extends RecyclerView.Adapter<AdapterRestauran
                 Restaurant restaurant = restaurantList.get(getAdapterPosition());
                 restaurantViewModal.setRestaurant(restaurant);
 
-                navController.navigate(R.id.restaurantDetailsFragment);
+                navController.navigate(R.id.action_homeFragment_to_restaurantDetailsFragment);
             });
 
         }
