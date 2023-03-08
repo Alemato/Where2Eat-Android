@@ -73,7 +73,7 @@ public class AdapterBookingCard extends RecyclerView.Adapter<AdapterBookingCard.
                     itemView.setOnClickListener(v -> {
                         Restaurant restaurant = restaurantList.stream().filter(r -> Objects.equals(r.getId(), bookingList.get(getAdapterPosition()).getRistoranteId())).collect(Collectors.toList()).get(0);
                         restaurantViewModal.setRestaurant(restaurant);
-                        navController.navigate(R.id.restaurantDetailsFragment);
+                        navController.navigate(R.id.action_bookingFragment_to_restaurantDetailsFragment);
                     });
                 });
             }).start();

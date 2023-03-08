@@ -22,7 +22,11 @@
     <fragment
         android:id="@+id/bookingFragment"
         android:name="com.example.where2eat.BookingFragment"
-        android:label="BookingFragment" />
+        android:label="BookingFragment" >
+        <action
+            android:id="@+id/action_bookingFragment_to_restaurantDetailsFragment"
+            app:destination="@id/restaurantDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/ristorantiMapFragment"
         android:name="com.example.where2eat.RistorantiMapFragment"
