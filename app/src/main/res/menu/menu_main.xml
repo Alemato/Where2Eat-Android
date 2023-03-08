@@ -4,10 +4,14 @@
 
     <item
         android:id="@+id/menuHome"
-        android:title="@string/home" />
+        android:icon="@drawable/baseline_home_24"
+        android:title="@string/home"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menuMappa"
-        android:title="@string/mappa" />
+        android:icon="@drawable/baseline_map_24"
+        android:title="@string/mappa"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menuPrenotazioni"
         android:title="@string/prenotazioni_effettuate" />
